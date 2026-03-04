@@ -86,7 +86,7 @@
 
     /* ── Quick Catch ── */
     .quick-catch-wrap {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .btn-quick {
       width: 100%; border: none; border-radius: 16px; cursor: pointer;
@@ -115,6 +115,44 @@
     }
     .qc-divider::before, .qc-divider::after {
       content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── Featured Fish ── */
+    .freshwater-label {
+      font-size: .72rem; font-weight: 700;
+      color: var(--teal); text-transform: uppercase;
+      letter-spacing: .8px; margin-bottom: 8px;
+    }
+    .featured-fish {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .fish-feature-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 6px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .18s, background .18s, transform .12s;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .fish-feature-card:hover { border-color: var(--blue-light); background: #eef5fb; }
+    .fish-feature-card.sel  { border-color: var(--teal); background: #e0f7f7; }
+    .fish-feature-card:active { transform: scale(.93); }
+    .fish-svg {
+      width: 100%; height: 34px;
+      color: var(--blue-light);
+      display: block; margin-bottom: 5px;
+      transition: color .18s;
+    }
+    .fish-feature-card.sel .fish-svg { color: var(--teal); }
+    .fish-feature-name {
+      font-size: .7rem; font-weight: 700;
+      color: var(--text); letter-spacing: .3px;
     }
 
     /* ── Form ── */
@@ -181,6 +219,15 @@
       box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
     .catch-card.needs-details { border-left: 3px solid var(--gold); }
+    .catch-card.tappable {
+      cursor: pointer;
+      transition: box-shadow .15s, transform .1s;
+    }
+    .catch-card.tappable:hover {
+      box-shadow: 0 3px 14px rgba(37,99,168,.15);
+      transform: translateY(-1px);
+    }
+    .catch-card.tappable:active { transform: scale(.99); box-shadow: none; }
     .catch-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
     .catch-species { font-size: 1.05rem; font-weight: 700; color: var(--blue-dark); }
     .catch-date { font-size: .75rem; color: var(--muted); white-space: nowrap; }
@@ -203,6 +250,9 @@
     .catch-meta  { font-size: .8rem; color: var(--muted); margin-top: 7px; line-height: 1.5; }
     .catch-notes { font-size: .82rem; color: var(--text); margin-top: 7px; font-style: italic; }
     .catch-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 10px; }
+
+    /* ── Log Recent Catches ── */
+    .log-recent-section { margin-top: 24px; }
 
     /* ── Filter bar ── */
     .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
@@ -353,6 +403,46 @@ let editingId = null;
 
 const SPECIES = ['Bass','Trout','Walleye','Pike','Perch','Catfish','Crappie','Bluegill','Salmon','Musky','Carp','Tilapia'];
 
+const FISH_ICONS = {
+  'Bass':'🐟','Trout':'🐠','Walleye':'🐡','Pike':'🦈',
+  'Perch':'🐟','Catfish':'🐡','Crappie':'🐠','Bluegill':'🐟',
+  'Salmon':'🐟','Musky':'🦈','Carp':'🐡','Tilapia':'🐟'
+};
+
+// Inline SVG fish silhouettes for the three freshwater favorites
+const FISH_SVG = {
+  Walleye: `<svg class="fish-svg" viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6,15 C14,5 32,4 46,7 C58,10 64,13 64,15 C64,17 58,20 46,23 C32,26 14,25 6,15Z" fill="currentColor" opacity="0.88"/>
+    <path d="M62,15 L76,5 L74,15 L76,25Z" fill="currentColor" opacity="0.72"/>
+    <path d="M24,7 C28,3 36,2 42,5" stroke="currentColor" stroke-width="2" fill="none" opacity="0.5"/>
+    <circle cx="16" cy="13" r="4" fill="white"/>
+    <circle cx="16" cy="13" r="2.5" fill="currentColor" opacity="0.9"/>
+    <circle cx="14.5" cy="11.5" r="0.9" fill="white"/>
+  </svg>`,
+
+  Crappie: `<svg class="fish-svg" viewBox="0 0 55 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M5,20 C8,6 22,4 30,10 C38,16 38,24 30,30 C22,36 8,34 5,20Z" fill="currentColor" opacity="0.88"/>
+    <path d="M28,20 L42,8 L40,20 L42,32Z" fill="currentColor" opacity="0.72"/>
+    <path d="M13,5 L15,2 L17,5 L19,2 L21,5 L23,3 L25,7 L21,12 L13,13Z" fill="currentColor" opacity="0.6"/>
+    <circle cx="11" cy="18" r="3" fill="white"/>
+    <circle cx="11" cy="18" r="1.8" fill="currentColor" opacity="0.9"/>
+    <circle cx="18" cy="22" r="1.5" fill="currentColor" opacity="0.32"/>
+    <circle cx="24" cy="17" r="1.5" fill="currentColor" opacity="0.32"/>
+    <circle cx="21" cy="27" r="1" fill="currentColor" opacity="0.22"/>
+  </svg>`,
+
+  Musky: `<svg class="fish-svg" viewBox="0 0 90 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4,11 C14,4 38,3 56,5 C70,7 78,9 80,11 C78,13 70,15 56,17 C38,19 14,18 4,11Z" fill="currentColor" opacity="0.88"/>
+    <path d="M78,11 L92,2 L90,11 L92,20Z" fill="currentColor" opacity="0.72"/>
+    <path d="M6,11 L0,8 L2,11 L0,14Z" fill="currentColor" opacity="0.65"/>
+    <line x1="30" y1="5" x2="32" y2="17" stroke="white" stroke-width="1.5" opacity="0.28"/>
+    <line x1="42" y1="4" x2="44" y2="18" stroke="white" stroke-width="1.5" opacity="0.28"/>
+    <line x1="54" y1="5" x2="56" y2="17" stroke="white" stroke-width="1.5" opacity="0.28"/>
+    <circle cx="13" cy="9" r="2.5" fill="white"/>
+    <circle cx="13" cy="9" r="1.5" fill="currentColor" opacity="0.9"/>
+  </svg>`
+};
+
 // ─── Routing ──────────────────────────────────────────────────────────────────
 function showTab(tab) {
   currentTab = tab;
@@ -396,6 +486,10 @@ function quickCatch() {
     btn.disabled = false;
     btn.querySelector('.qc-title').textContent = 'Quick Catch — Log Now';
     btn.querySelector('.qc-sub').textContent = 'Records time & GPS instantly';
+
+    // Refresh the recent catches list without re-rendering the whole tab
+    const wrap = document.getElementById('log-recent-wrap');
+    if (wrap) wrap.innerHTML = renderRecentCatches();
   }
 
   if (!navigator.geolocation) {
@@ -408,6 +502,17 @@ function quickCatch() {
     ()  => finalize(null),
     { timeout: 12000, maximumAge: 30000, enableHighAccuracy: true }
   );
+}
+
+// ─── Recent Catches (Log Tab) ─────────────────────────────────────────────────
+function renderRecentCatches() {
+  const recent = catches.slice(0, 8);
+  if (!recent.length) return '';
+  return `
+  <div class="log-recent-section">
+    <div class="section-title">Recent Catches — tap to edit</div>
+    ${recent.map(c => renderCatchCard(c, true)).join('')}
+  </div>`;
 }
 
 // ─── Log Form ─────────────────────────────────────────────────────────────────
@@ -425,6 +530,15 @@ function renderLogForm() {
     </button>
   </div>
 
+  <div class="freshwater-label">🌿 Freshwater Favorites</div>
+  <div class="featured-fish">
+    ${['Walleye','Crappie','Musky'].map(s => `
+    <div class="fish-feature-card" data-species="${s}" onclick="selectSpecies('${s}')">
+      ${FISH_SVG[s]}
+      <div class="fish-feature-name">${s}</div>
+    </div>`).join('')}
+  </div>
+
   <div class="qc-divider">or fill in details now</div>
 
   <div class="section-title">New Catch</div>
@@ -433,7 +547,7 @@ function renderLogForm() {
       <div class="full">
         <label>Species</label>
         <div class="species-chips" id="chips">
-          ${SPECIES.map(s => `<span class="chip" data-species="${s}" onclick="selectSpecies('${s}')">${s}</span>`).join('')}
+          ${SPECIES.map(s => `<span class="chip" data-species="${s}" onclick="selectSpecies('${s}')">${FISH_ICONS[s]||'🐟'} ${s}</span>`).join('')}
         </div>
         <input id="f-species" type="text" placeholder="Species (tap above or type)" autocomplete="off" />
       </div>
@@ -473,7 +587,9 @@ function renderLogForm() {
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" onclick="submitCatch()">Save Catch 🎣</button>`;
+  <button class="btn btn-primary" onclick="submitCatch()">Save Catch 🎣</button>
+
+  <div id="log-recent-wrap">${catches.length ? renderRecentCatches() : ''}</div>`;
 }
 
 function initLogForm() {
@@ -484,12 +600,18 @@ function initLogForm() {
     document.querySelectorAll('#chips .chip').forEach(c => {
       c.classList.toggle('sel', c.dataset.species.toLowerCase() === val);
     });
+    document.querySelectorAll('.fish-feature-card').forEach(c => {
+      c.classList.toggle('sel', c.dataset.species.toLowerCase() === val);
+    });
   });
 }
 
 function selectSpecies(name) {
-  document.getElementById('f-species').value = name;
+  const input = document.getElementById('f-species');
+  if (input) input.value = name;
   document.querySelectorAll('#chips .chip').forEach(c =>
+    c.classList.toggle('sel', c.dataset.species === name));
+  document.querySelectorAll('.fish-feature-card').forEach(c =>
     c.classList.toggle('sel', c.dataset.species === name));
 }
 
@@ -525,7 +647,7 @@ function renderHistory() {
   const speciesSet = [...new Set(catches.map(c => c.species).filter(Boolean))].sort();
   const filtered = filterCatches();
   const cards = filtered.length
-    ? filtered.map(renderCatchCard).join('')
+    ? filtered.map(c => renderCatchCard(c, false)).join('')
     : `<div class="empty"><div class="emoji">🌊</div><p>No catches yet. Go fish!</p></div>`;
 
   return `
@@ -547,7 +669,7 @@ function updateFilter(key, val) {
   histFilter[key] = val;
   const list = filterCatches();
   document.getElementById('catch-list').innerHTML = list.length
-    ? list.map(renderCatchCard).join('')
+    ? list.map(c => renderCatchCard(c, false)).join('')
     : `<div class="empty"><div class="emoji">🔍</div><p>No catches match your filter.</p></div>`;
 }
 
@@ -563,11 +685,12 @@ function filterCatches() {
   });
 }
 
-function renderCatchCard(c) {
+function renderCatchCard(c, tappable) {
   const d = new Date(c.timestamp);
   const dateStr = d.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
   const timeStr = d.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit' });
   const needsDetails = !c.species;
+  const stopProp = tappable ? 'event.stopPropagation();' : '';
 
   const badges = [];
   if (c.length)   badges.push(`<span class="badge badge-blue">📏 ${c.length}"</span>`);
@@ -578,7 +701,7 @@ function renderCatchCard(c) {
     const lat = c.gps.lat.toFixed(5);
     const lng = c.gps.lng.toFixed(5);
     const mapsUrl = `https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch`;
-    badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps">📍 ${lat}, ${lng}</a>`);
+    badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps" onclick="${stopProp}">📍 ${lat}, ${lng}</a>`);
   }
   if (needsDetails) badges.push(`<span class="badge badge-amber">✏️ Needs details</span>`);
 
@@ -587,8 +710,10 @@ function renderCatchCard(c) {
   meta.push(`🕐 ${dateStr} ${timeStr}`);
   if (c.gps && c.gps.acc) meta.push(`±${c.gps.acc}m`);
 
+  const cardAttrs = tappable ? ` class="catch-card${needsDetails?' needs-details':''} tappable" onclick="openEdit('${c.id}')"` : ` class="catch-card${needsDetails?' needs-details':''}"`;
+
   return `
-  <div class="catch-card${needsDetails ? ' needs-details' : ''}">
+  <div${cardAttrs}>
     <div class="catch-header">
       <span class="catch-species">${c.species ? esc(c.species) : '<em style="color:var(--muted);font-weight:500">Unknown species</em>'}</span>
       <span class="catch-date">${dateStr}</span>
@@ -597,8 +722,8 @@ function renderCatchCard(c) {
     <div class="catch-meta">${meta.join(' &nbsp;·&nbsp; ')}</div>
     ${c.notes ? `<div class="catch-notes">"${esc(c.notes)}"</div>` : ''}
     <div class="catch-actions">
-      <button class="btn btn-primary btn-sm" onclick="openEdit('${c.id}')">Edit</button>
-      <button class="btn btn-danger btn-sm" onclick="confirmDelete('${c.id}','${esc(c.species||'this catch')}')">Delete</button>
+      <button class="btn btn-primary btn-sm" onclick="${stopProp}openEdit('${c.id}')">Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="${stopProp}confirmDelete('${c.id}','${esc(c.species||'this catch')}')">Delete</button>
     </div>
   </div>`;
 }
@@ -617,7 +742,7 @@ function openEdit(id) {
       <div class="full">
         <label>Species</label>
         <div class="species-chips" id="edit-chips">
-          ${SPECIES.map(s => `<span class="chip${c.species===s?' sel':''}" data-species="${s}" onclick="editSelectSpecies('${s}')">${s}</span>`).join('')}
+          ${SPECIES.map(s => `<span class="chip${c.species===s?' sel':''}" data-species="${s}" onclick="editSelectSpecies('${s}')">${FISH_ICONS[s]||'🐟'} ${s}</span>`).join('')}
         </div>
         <input id="e-species" type="text" value="${esc(c.species||'')}" placeholder="Species" autocomplete="off" />
       </div>
@@ -703,6 +828,10 @@ function saveEdit() {
   closeEditOverlay();
   showToast('Catch updated!');
   if (currentTab === 'history') showTab('history');
+  if (currentTab === 'log') {
+    const wrap = document.getElementById('log-recent-wrap');
+    if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : '';
+  }
 }
 
 function closeEditOverlay() {
@@ -792,6 +921,10 @@ function doDelete() {
   closeDeleteOverlay();
   showToast('Catch deleted.');
   if (currentTab === 'history') showTab('history');
+  if (currentTab === 'log') {
+    const wrap = document.getElementById('log-recent-wrap');
+    if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : '';
+  }
 }
 
 function closeDeleteOverlay() {
