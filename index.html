@@ -18,7 +18,8 @@
       --blue:       #2563a8;
       --blue-light: #4a90c4;
       --teal:       #0e8080;
-      --green:      #2d7a3a;
+      --green:      #1e7a35;
+      --green-lt:   #e3f7e8;
       --gold:       #d4a017;
       --bg:         #f0f6fb;
       --surface:    #ffffff;
@@ -83,6 +84,39 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.06);
     }
 
+    /* ── Quick Catch ── */
+    .quick-catch-wrap {
+      margin-bottom: 20px;
+    }
+    .btn-quick {
+      width: 100%; border: none; border-radius: 16px; cursor: pointer;
+      background: var(--green);
+      color: #fff; padding: 0;
+      display: flex; align-items: center;
+      box-shadow: 0 4px 16px rgba(30,122,53,.35);
+      transition: opacity .15s, transform .12s, box-shadow .15s;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-quick:active { transform: scale(.97); opacity: .9; box-shadow: 0 2px 8px rgba(30,122,53,.2); }
+    .btn-quick:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-quick .qc-icon {
+      width: 80px; min-width: 80px; height: 80px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.4rem;
+      background: rgba(0,0,0,.12);
+    }
+    .btn-quick .qc-text { padding: 0 18px; text-align: left; }
+    .btn-quick .qc-title { font-size: 1.15rem; font-weight: 800; display: block; }
+    .btn-quick .qc-sub   { font-size: .78rem; opacity: .85; display: block; margin-top: 3px; }
+    .qc-divider {
+      display: flex; align-items: center; gap: 10px;
+      margin: 18px 0; color: var(--muted); font-size: .78rem; font-weight: 600;
+    }
+    .qc-divider::before, .qc-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
     /* ── Form ── */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-grid .full { grid-column: 1 / -1; }
@@ -121,10 +155,14 @@
     }
     .btn:active { transform: scale(.98); opacity: .85; }
     .btn-primary { background: var(--blue); color: #fff; }
+    .btn-success { background: var(--green); color: #fff; }
     .btn-danger  { background: var(--danger); color: #fff; }
     .btn-sm {
       display: inline-block; width: auto; padding: 6px 14px;
       font-size: .8rem; border-radius: 8px; font-weight: 600;
+    }
+    .btn-ghost {
+      background: var(--bg); border: 1.5px solid var(--border); color: var(--text);
     }
 
     .section-title {
@@ -142,6 +180,7 @@
       margin-bottom: 10px;
       box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
+    .catch-card.needs-details { border-left: 3px solid var(--gold); }
     .catch-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
     .catch-species { font-size: 1.05rem; font-weight: 700; color: var(--blue-dark); }
     .catch-date { font-size: .75rem; color: var(--muted); white-space: nowrap; }
@@ -152,18 +191,18 @@
       font-size: .75rem; font-weight: 600;
     }
     .badge-blue  { background: #e3f0fb; color: var(--blue); }
-    .badge-green { background: #e3f7e8; color: var(--green); }
+    .badge-green { background: var(--green-lt); color: var(--green); }
     .badge-gold  { background: #fdf5e0; color: #a07800; }
     .badge-teal  { background: #e0f7f7; color: var(--teal); }
+    .badge-amber { background: #fff8e0; color: #8a6000; }
+    .badge-gps   {
+      background: var(--green-lt); color: var(--green);
+      cursor: pointer; text-decoration: none;
+    }
+    .badge-gps:hover { background: #c0edcc; }
     .catch-meta  { font-size: .8rem; color: var(--muted); margin-top: 7px; line-height: 1.5; }
     .catch-notes { font-size: .82rem; color: var(--text); margin-top: 7px; font-style: italic; }
-    .catch-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
-
-    .released-tag {
-      font-size: .7rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .5px; color: var(--green); background: #e3f7e8;
-      padding: 2px 7px; border-radius: 4px;
-    }
+    .catch-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 10px; }
 
     /* ── Filter bar ── */
     .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
@@ -210,22 +249,32 @@
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── Confirm overlay ── */
-    #overlay {
+    /* ── Bottom sheet overlay (shared) ── */
+    .sheet-backdrop {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,.45); z-index: 300;
       align-items: flex-end; justify-content: center;
     }
-    #overlay.open { display: flex; }
-    .overlay-box {
+    .sheet-backdrop.open { display: flex; }
+    .sheet-box {
       background: var(--surface); border-radius: 16px 16px 0 0;
-      padding: 24px 20px; padding-bottom: calc(24px + var(--safe-b));
+      padding: 20px; padding-bottom: calc(20px + var(--safe-b));
       width: 100%; max-width: 540px;
     }
-    .overlay-box h3 { font-size: 1.05rem; margin-bottom: 8px; }
-    .overlay-box p  { font-size: .9rem; color: var(--muted); margin-bottom: 20px; }
-    .overlay-actions { display: flex; gap: 10px; }
-    .overlay-actions button { flex: 1; }
+    .sheet-handle {
+      width: 36px; height: 4px; background: var(--border);
+      border-radius: 2px; margin: 0 auto 16px;
+    }
+    /* scrollable edit sheet */
+    #edit-overlay .sheet-box {
+      max-height: 88vh;
+      overflow-y: auto;
+      padding-bottom: calc(24px + var(--safe-b));
+    }
+    .sheet-box h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .sheet-box p  { font-size: .9rem; color: var(--muted); margin-bottom: 20px; }
+    .sheet-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .sheet-actions button { flex: 1; }
 
     /* ── Export ── */
     .export-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
@@ -233,6 +282,8 @@
     /* scrollbar */
     main::-webkit-scrollbar { width: 4px; }
     main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    #edit-overlay .sheet-box::-webkit-scrollbar { width: 4px; }
+    #edit-overlay .sheet-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -258,19 +309,35 @@
 </div>
 
 <div id="toast"></div>
-<div id="overlay">
-  <div class="overlay-box">
-    <h3 id="overlay-title"></h3>
-    <p id="overlay-msg"></p>
-    <div class="overlay-actions">
-      <button class="btn btn-danger" id="overlay-confirm">Delete</button>
-      <button class="btn" style="background:var(--border);color:var(--text)" onclick="closeOverlay()">Cancel</button>
+
+<!-- Delete confirmation sheet -->
+<div id="delete-overlay" class="sheet-backdrop">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <h3 id="del-title"></h3>
+    <p id="del-msg"></p>
+    <div class="sheet-actions">
+      <button class="btn btn-danger" id="del-confirm">Delete</button>
+      <button class="btn btn-ghost" onclick="closeDeleteOverlay()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit sheet -->
+<div id="edit-overlay" class="sheet-backdrop">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <div class="section-title" style="margin-bottom:14px">Edit Catch</div>
+    <div id="edit-form-body"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-success" onclick="saveEdit()">Save Changes</button>
+      <button class="btn btn-ghost" onclick="closeEditOverlay()">Cancel</button>
     </div>
   </div>
 </div>
 
 <script>
-// ─── Data ───────────────────────────────────────────────────────────────────
+// ─── Data ────────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'fishlog_catches_v1';
 
 function load() {
@@ -282,10 +349,11 @@ function save(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 let catches = load();
 let currentTab = 'log';
 let pendingDeleteId = null;
+let editingId = null;
 
 const SPECIES = ['Bass','Trout','Walleye','Pike','Perch','Catfish','Crappie','Bluegill','Salmon','Musky','Carp','Tilapia'];
 
-// ─── Routing ─────────────────────────────────────────────────────────────────
+// ─── Routing ──────────────────────────────────────────────────────────────────
 function showTab(tab) {
   currentTab = tab;
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -297,11 +365,68 @@ function showTab(tab) {
   if (tab === 'log') initLogForm();
 }
 
-// ─── Log Form ────────────────────────────────────────────────────────────────
+// ─── Quick Catch ─────────────────────────────────────────────────────────────
+function quickCatch() {
+  const btn = document.getElementById('qc-btn');
+  btn.disabled = true;
+  btn.querySelector('.qc-title').textContent = 'Getting GPS…';
+  btn.querySelector('.qc-sub').textContent = 'Please wait';
+
+  const timestamp = new Date().toISOString();
+
+  function finalize(gps) {
+    const entry = {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+      timestamp,
+      species: '',
+      length: null, weight: null,
+      location: '', lure: '', notes: '',
+      released: false,
+      gps: gps || null
+    };
+    catches.unshift(entry);
+    save(catches);
+
+    if (gps) {
+      showToast('Caught! ✓ GPS & time recorded 📍');
+    } else {
+      showToast('Caught! ✓ Time recorded — GPS unavailable');
+    }
+
+    btn.disabled = false;
+    btn.querySelector('.qc-title').textContent = 'Quick Catch — Log Now';
+    btn.querySelector('.qc-sub').textContent = 'Records time & GPS instantly';
+  }
+
+  if (!navigator.geolocation) {
+    finalize(null);
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    pos => finalize({ lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy) }),
+    ()  => finalize(null),
+    { timeout: 12000, maximumAge: 30000, enableHighAccuracy: true }
+  );
+}
+
+// ─── Log Form ─────────────────────────────────────────────────────────────────
 function renderLogForm() {
   const now = new Date();
   const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0,16);
   return `
+  <div class="quick-catch-wrap">
+    <button class="btn-quick" id="qc-btn" onclick="quickCatch()">
+      <span class="qc-icon">🎣</span>
+      <span class="qc-text">
+        <span class="qc-title">Quick Catch — Log Now</span>
+        <span class="qc-sub">Records time &amp; GPS instantly</span>
+      </span>
+    </button>
+  </div>
+
+  <div class="qc-divider">or fill in details now</div>
+
   <div class="section-title">New Catch</div>
   <div class="card">
     <div class="form-grid">
@@ -383,7 +508,8 @@ function submitCatch() {
   const entry = {
     id: Date.now().toString(36) + Math.random().toString(36).slice(2),
     timestamp: dt ? new Date(dt).toISOString() : new Date().toISOString(),
-    species, length, weight, location, lure, notes, released
+    species, length, weight, location, lure, notes, released,
+    gps: null
   };
 
   catches.unshift(entry);
@@ -392,11 +518,11 @@ function submitCatch() {
   showTab('log');
 }
 
-// ─── History ─────────────────────────────────────────────────────────────────
+// ─── History ──────────────────────────────────────────────────────────────────
 let histFilter = { q: '', species: '' };
 
 function renderHistory() {
-  const speciesSet = [...new Set(catches.map(c => c.species))].sort();
+  const speciesSet = [...new Set(catches.map(c => c.species).filter(Boolean))].sort();
   const filtered = filterCatches();
   const cards = filtered.length
     ? filtered.map(renderCatchCard).join('')
@@ -419,16 +545,19 @@ function renderHistory() {
 
 function updateFilter(key, val) {
   histFilter[key] = val;
-  document.getElementById('catch-list').innerHTML =
-    filterCatches().length
-      ? filterCatches().map(renderCatchCard).join('')
-      : `<div class="empty"><div class="emoji">🔍</div><p>No catches match your filter.</p></div>`;
+  const list = filterCatches();
+  document.getElementById('catch-list').innerHTML = list.length
+    ? list.map(renderCatchCard).join('')
+    : `<div class="empty"><div class="emoji">🔍</div><p>No catches match your filter.</p></div>`;
 }
 
 function filterCatches() {
   const q = histFilter.q.toLowerCase();
   return catches.filter(c => {
-    const matchQ = !q || c.species.toLowerCase().includes(q) || (c.location||'').toLowerCase().includes(q) || (c.lure||'').toLowerCase().includes(q);
+    const matchQ = !q
+      || (c.species||'').toLowerCase().includes(q)
+      || (c.location||'').toLowerCase().includes(q)
+      || (c.lure||'').toLowerCase().includes(q);
     const matchS = !histFilter.species || c.species === histFilter.species;
     return matchQ && matchS;
   });
@@ -438,33 +567,154 @@ function renderCatchCard(c) {
   const d = new Date(c.timestamp);
   const dateStr = d.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
   const timeStr = d.toLocaleTimeString(undefined, { hour:'numeric', minute:'2-digit' });
+  const needsDetails = !c.species;
 
   const badges = [];
-  if (c.length) badges.push(`<span class="badge badge-blue">📏 ${c.length}"</span>`);
-  if (c.weight) badges.push(`<span class="badge badge-gold">⚖️ ${c.weight} lbs</span>`);
-  if (c.lure)   badges.push(`<span class="badge badge-teal">🪝 ${esc(c.lure)}</span>`);
+  if (c.length)   badges.push(`<span class="badge badge-blue">📏 ${c.length}"</span>`);
+  if (c.weight)   badges.push(`<span class="badge badge-gold">⚖️ ${c.weight} lbs</span>`);
+  if (c.lure)     badges.push(`<span class="badge badge-teal">🪝 ${esc(c.lure)}</span>`);
   if (c.released) badges.push(`<span class="badge badge-green">↩️ Released</span>`);
+  if (c.gps) {
+    const lat = c.gps.lat.toFixed(5);
+    const lng = c.gps.lng.toFixed(5);
+    const mapsUrl = `https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch`;
+    badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps">📍 ${lat}, ${lng}</a>`);
+  }
+  if (needsDetails) badges.push(`<span class="badge badge-amber">✏️ Needs details</span>`);
 
   const meta = [];
   if (c.location) meta.push(`📍 ${esc(c.location)}`);
   meta.push(`🕐 ${dateStr} ${timeStr}`);
+  if (c.gps && c.gps.acc) meta.push(`±${c.gps.acc}m`);
 
   return `
-  <div class="catch-card">
+  <div class="catch-card${needsDetails ? ' needs-details' : ''}">
     <div class="catch-header">
-      <span class="catch-species">${esc(c.species)}</span>
+      <span class="catch-species">${c.species ? esc(c.species) : '<em style="color:var(--muted);font-weight:500">Unknown species</em>'}</span>
       <span class="catch-date">${dateStr}</span>
     </div>
     ${badges.length ? `<div class="catch-badges">${badges.join('')}</div>` : ''}
     <div class="catch-meta">${meta.join(' &nbsp;·&nbsp; ')}</div>
     ${c.notes ? `<div class="catch-notes">"${esc(c.notes)}"</div>` : ''}
     <div class="catch-actions">
-      <button class="btn btn-danger btn-sm" onclick="confirmDelete('${c.id}','${esc(c.species)}')">Delete</button>
+      <button class="btn btn-primary btn-sm" onclick="openEdit('${c.id}')">Edit</button>
+      <button class="btn btn-danger btn-sm" onclick="confirmDelete('${c.id}','${esc(c.species||'this catch')}')">Delete</button>
     </div>
   </div>`;
 }
 
-// ─── Stats ───────────────────────────────────────────────────────────────────
+// ─── Edit ────────────────────────────────────────────────────────────────────
+function openEdit(id) {
+  const c = catches.find(x => x.id === id);
+  if (!c) return;
+  editingId = id;
+
+  const d = new Date(c.timestamp);
+  const localISO = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+
+  document.getElementById('edit-form-body').innerHTML = `
+    <div class="form-grid">
+      <div class="full">
+        <label>Species</label>
+        <div class="species-chips" id="edit-chips">
+          ${SPECIES.map(s => `<span class="chip${c.species===s?' sel':''}" data-species="${s}" onclick="editSelectSpecies('${s}')">${s}</span>`).join('')}
+        </div>
+        <input id="e-species" type="text" value="${esc(c.species||'')}" placeholder="Species" autocomplete="off" />
+      </div>
+
+      <div>
+        <label>Length (in)</label>
+        <input id="e-length" type="number" value="${c.length||''}" placeholder="e.g. 14" min="0" step="0.5" inputmode="decimal" />
+      </div>
+      <div>
+        <label>Weight (lbs)</label>
+        <input id="e-weight" type="number" value="${c.weight||''}" placeholder="e.g. 2.5" min="0" step="0.1" inputmode="decimal" />
+      </div>
+
+      <div class="full">
+        <label>Location</label>
+        <input id="e-location" type="text" value="${esc(c.location||'')}" placeholder="e.g. Lake Tahoe, North Shore" autocomplete="off" />
+      </div>
+
+      <div class="full">
+        <label>Lure / Bait</label>
+        <input id="e-lure" type="text" value="${esc(c.lure||'')}" placeholder="e.g. Rapala J11, nightcrawler" autocomplete="off" />
+      </div>
+
+      <div class="full">
+        <label>Date &amp; Time</label>
+        <input id="e-datetime" type="datetime-local" value="${localISO}" />
+      </div>
+
+      ${c.gps ? `<div class="full">
+        <label>GPS Waypoint</label>
+        <div style="font-size:.85rem;color:var(--muted);padding:8px 0">
+          📍 ${c.gps.lat.toFixed(6)}, ${c.gps.lng.toFixed(6)}
+          ${c.gps.acc ? `<span style="margin-left:6px">±${c.gps.acc}m accuracy</span>` : ''}
+          &nbsp;·&nbsp; <a href="https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch" target="_blank" style="color:var(--blue)">Open in Maps</a>
+        </div>
+      </div>` : ''}
+
+      <div class="full">
+        <label>Notes</label>
+        <textarea id="e-notes" placeholder="Water conditions, weather, depth…">${esc(c.notes||'')}</textarea>
+      </div>
+
+      <div class="full toggle-row">
+        <input type="checkbox" id="e-released" ${c.released?'checked':''} />
+        <label for="e-released">Released (catch &amp; release)</label>
+      </div>
+    </div>`;
+
+  const input = document.getElementById('e-species');
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toLowerCase();
+    document.querySelectorAll('#edit-chips .chip').forEach(ch =>
+      ch.classList.toggle('sel', ch.dataset.species.toLowerCase() === val));
+  });
+
+  document.getElementById('edit-overlay').classList.add('open');
+}
+
+function editSelectSpecies(name) {
+  document.getElementById('e-species').value = name;
+  document.querySelectorAll('#edit-chips .chip').forEach(c =>
+    c.classList.toggle('sel', c.dataset.species === name));
+}
+
+function saveEdit() {
+  const idx = catches.findIndex(x => x.id === editingId);
+  if (idx === -1) return;
+
+  const dt = document.getElementById('e-datetime').value;
+  catches[idx] = {
+    ...catches[idx],
+    species:  document.getElementById('e-species').value.trim(),
+    length:   parseFloat(document.getElementById('e-length').value) || null,
+    weight:   parseFloat(document.getElementById('e-weight').value) || null,
+    location: document.getElementById('e-location').value.trim(),
+    lure:     document.getElementById('e-lure').value.trim(),
+    timestamp: dt ? new Date(dt).toISOString() : catches[idx].timestamp,
+    notes:    document.getElementById('e-notes').value.trim(),
+    released: document.getElementById('e-released').checked,
+  };
+
+  save(catches);
+  closeEditOverlay();
+  showToast('Catch updated!');
+  if (currentTab === 'history') showTab('history');
+}
+
+function closeEditOverlay() {
+  document.getElementById('edit-overlay').classList.remove('open');
+  editingId = null;
+}
+
+document.getElementById('edit-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeEditOverlay();
+});
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
 function renderStats() {
   if (!catches.length) return `<div class="empty"><div class="emoji">📊</div><p>Log some catches to see stats!</p></div>`;
 
@@ -472,19 +722,19 @@ function renderStats() {
   const released = catches.filter(c => c.released).length;
   const withLength = catches.filter(c => c.length);
   const withWeight = catches.filter(c => c.weight);
-  const biggest = withLength.length ? withLength.reduce((a,b) => b.length > a.length ? b : a) : null;
+  const biggest  = withLength.length ? withLength.reduce((a,b) => b.length > a.length ? b : a) : null;
   const heaviest = withWeight.length ? withWeight.reduce((a,b) => b.weight > a.weight ? b : a) : null;
   const avgLength = withLength.length ? (withLength.reduce((s,c) => s+c.length, 0) / withLength.length).toFixed(1) : '—';
 
-  // species breakdown
   const bySpecies = {};
-  catches.forEach(c => { bySpecies[c.species] = (bySpecies[c.species]||0) + 1; });
+  catches.forEach(c => { if(c.species) bySpecies[c.species] = (bySpecies[c.species]||0) + 1; });
   const topSpecies = Object.entries(bySpecies).sort((a,b) => b[1]-a[1]).slice(0,5);
 
-  // locations
   const byLocation = {};
   catches.forEach(c => { if(c.location) byLocation[c.location] = (byLocation[c.location]||0)+1; });
   const topLocations = Object.entries(byLocation).sort((a,b) => b[1]-a[1]).slice(0,5);
+
+  const gpsCount = catches.filter(c => c.gps).length;
 
   return `
   <div class="section-title">Overview</div>
@@ -494,7 +744,7 @@ function renderStats() {
     <div class="stat-card"><div class="stat-val">${biggest ? biggest.length + '"' : '—'}</div><div class="stat-label">Longest Fish</div></div>
     <div class="stat-card"><div class="stat-val">${heaviest ? heaviest.weight + ' lbs' : '—'}</div><div class="stat-label">Heaviest Fish</div></div>
     <div class="stat-card"><div class="stat-val">${avgLength}"</div><div class="stat-label">Avg Length</div></div>
-    <div class="stat-card"><div class="stat-val">${Object.keys(bySpecies).length}</div><div class="stat-label">Species Caught</div></div>
+    <div class="stat-card"><div class="stat-val">${gpsCount}</div><div class="stat-label">GPS Waypoints</div></div>
   </div>
 
   ${biggest ? `<div class="card" style="margin-top:14px">
@@ -530,39 +780,40 @@ function renderStats() {
 // ─── Delete ───────────────────────────────────────────────────────────────────
 function confirmDelete(id, species) {
   pendingDeleteId = id;
-  document.getElementById('overlay-title').textContent = 'Delete catch?';
-  document.getElementById('overlay-msg').textContent = `Remove "${species}" from your log. This cannot be undone.`;
-  document.getElementById('overlay-confirm').onclick = doDelete;
-  document.getElementById('overlay').classList.add('open');
+  document.getElementById('del-title').textContent = 'Delete catch?';
+  document.getElementById('del-msg').textContent = `Remove "${species}" from your log. This cannot be undone.`;
+  document.getElementById('del-confirm').onclick = doDelete;
+  document.getElementById('delete-overlay').classList.add('open');
 }
 
 function doDelete() {
   catches = catches.filter(c => c.id !== pendingDeleteId);
   save(catches);
-  closeOverlay();
+  closeDeleteOverlay();
   showToast('Catch deleted.');
-  showTab('history');
+  if (currentTab === 'history') showTab('history');
 }
 
-function closeOverlay() {
-  document.getElementById('overlay').classList.remove('open');
+function closeDeleteOverlay() {
+  document.getElementById('delete-overlay').classList.remove('open');
   pendingDeleteId = null;
 }
 
-document.getElementById('overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeOverlay();
+document.getElementById('delete-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeDeleteOverlay();
 });
 
 // ─── Export CSV ───────────────────────────────────────────────────────────────
 function exportCSV() {
   if (!catches.length) { showToast('No catches to export.'); return; }
-  const headers = ['Date','Time','Species','Length (in)','Weight (lbs)','Location','Lure/Bait','Released','Notes'];
+  const headers = ['Date','Time','Species','Length (in)','Weight (lbs)','Location','Lure/Bait','Released','Notes','GPS Lat','GPS Lng','GPS Accuracy (m)'];
   const rows = catches.map(c => {
     const d = new Date(c.timestamp);
     return [
       d.toLocaleDateString(), d.toLocaleTimeString(),
-      c.species, c.length||'', c.weight||'',
-      c.location||'', c.lure||'', c.released?'Yes':'No', c.notes||''
+      c.species||'', c.length||'', c.weight||'',
+      c.location||'', c.lure||'', c.released?'Yes':'No', c.notes||'',
+      c.gps ? c.gps.lat : '', c.gps ? c.gps.lng : '', c.gps ? (c.gps.acc||'') : ''
     ].map(v => `"${String(v).replace(/"/g,'""')}"`);
   });
   const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -581,7 +832,7 @@ function showToast(msg) {
   el.textContent = msg;
   el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
 // ─── Util ─────────────────────────────────────────────────────────────────────
