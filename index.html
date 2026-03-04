@@ -84,92 +84,84 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.06);
     }
 
-    /* ── Quick Catch ── */
-    .quick-catch-wrap {
-      margin-bottom: 16px;
-    }
+    /* ── Quick Catch Hero Button ── */
     .btn-quick {
-      width: 100%; border: none; border-radius: 16px; cursor: pointer;
-      background: var(--green);
+      width: 100%; border: none; border-radius: 20px; cursor: pointer;
+      background: linear-gradient(135deg, #1e7a35 0%, #0d7070 100%);
       color: #fff; padding: 0;
       display: flex; align-items: center;
-      box-shadow: 0 4px 16px rgba(30,122,53,.35);
+      box-shadow: 0 6px 24px rgba(14,128,128,.28), 0 2px 8px rgba(30,122,53,.22);
       transition: opacity .15s, transform .12s, box-shadow .15s;
       overflow: hidden;
+      position: relative;
+      min-height: 104px;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn-quick:active { transform: scale(.97); opacity: .9; box-shadow: 0 2px 8px rgba(30,122,53,.2); }
-    .btn-quick:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .btn-quick:active { transform: scale(.97); opacity: .92; box-shadow: 0 2px 8px rgba(14,128,128,.18); }
+    .btn-quick:disabled { opacity: .65; cursor: not-allowed; transform: none; }
     .btn-quick .qc-icon {
-      width: 80px; min-width: 80px; height: 80px;
+      width: 84px; min-width: 84px; height: 104px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.4rem;
-      background: rgba(0,0,0,.12);
+      font-size: 2.6rem;
+      background: rgba(0,0,0,.14);
+      flex-shrink: 0;
     }
-    .btn-quick .qc-text { padding: 0 18px; text-align: left; }
-    .btn-quick .qc-title { font-size: 1.15rem; font-weight: 800; display: block; }
-    .btn-quick .qc-sub   { font-size: .78rem; opacity: .85; display: block; margin-top: 3px; }
-    .qc-divider {
-      display: flex; align-items: center; gap: 10px;
-      margin: 18px 0; color: var(--muted); font-size: .78rem; font-weight: 600;
+    .btn-quick .qc-text { padding: 0 16px; text-align: left; flex: 1; position: relative; z-index: 1; }
+    .btn-quick .qc-title { font-size: 1.22rem; font-weight: 800; display: block; letter-spacing: .2px; }
+    .btn-quick .qc-sub   { font-size: .8rem; opacity: .82; display: block; margin-top: 4px; }
+    .btn-quick .qc-today {
+      display: inline-block; margin-top: 8px;
+      font-size: .72rem; font-weight: 700; opacity: .9;
+      background: rgba(255,255,255,.18); border-radius: 10px;
+      padding: 2px 9px;
     }
-    .qc-divider::before, .qc-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
+    /* decorative fish watermark inside button */
+    .qc-deco {
+      position: absolute; right: -12px; top: 50%;
+      transform: translateY(-50%);
+      opacity: .13; pointer-events: none; color: #fff;
+      animation: fishDrift 5s ease-in-out infinite;
+    }
+    .qc-deco svg { width: 170px; height: 74px; }
+    @keyframes fishDrift {
+      0%,100% { transform: translateY(-50%) translateX(0); }
+      50%      { transform: translateY(-50%) translateX(-8px); }
     }
 
-    /* ── Featured Fish ── */
+    /* ── Featured Fish (used inside picker) ── */
     .freshwater-label {
       font-size: .72rem; font-weight: 700;
       color: var(--teal); text-transform: uppercase;
       letter-spacing: .8px; margin-bottom: 8px;
     }
     .featured-fish {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;
     }
     .fish-feature-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 6px 8px;
-      text-align: center;
-      cursor: pointer;
+      background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
+      padding: 10px 6px 8px; text-align: center; cursor: pointer;
       transition: border-color .18s, background .18s, transform .12s;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+      -webkit-tap-highlight-color: transparent; user-select: none;
     }
     .fish-feature-card:hover { border-color: var(--blue-light); background: #eef5fb; }
     .fish-feature-card.sel  { border-color: var(--teal); background: #e0f7f7; }
     .fish-feature-card:active { transform: scale(.93); }
     .fish-svg {
-      width: 100%; height: 34px;
-      color: var(--blue-light);
-      display: block; margin-bottom: 5px;
-      transition: color .18s;
+      width: 100%; height: 34px; color: var(--blue-light);
+      display: block; margin-bottom: 5px; transition: color .18s;
     }
     .fish-feature-card.sel .fish-svg { color: var(--teal); }
-    .fish-feature-name {
-      font-size: .7rem; font-weight: 700;
-      color: var(--text); letter-spacing: .3px;
-    }
+    .fish-feature-name { font-size: .7rem; font-weight: 700; color: var(--text); letter-spacing: .3px; }
 
-    /* ── Form ── */
+    /* ── Form (edit overlay) ── */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-grid .full { grid-column: 1 / -1; }
     label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
     input, select, textarea {
       width: 100%; padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-size: .95rem;
-      font-family: inherit;
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      transition: border-color .15s;
-      -webkit-appearance: none;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: .95rem; font-family: inherit; background: var(--bg); color: var(--text);
+      outline: none; transition: border-color .15s; -webkit-appearance: none;
     }
     input:focus, select:focus, textarea:focus { border-color: var(--blue-light); background: #fff; }
     textarea { resize: vertical; min-height: 70px; }
@@ -177,7 +169,7 @@
     .species-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
     .chip {
       padding: 5px 11px; border-radius: 20px; font-size: .78rem; font-weight: 600;
-      background: var(--bg); border: 1.5px solid var(--border);
+      background: var(--surface); border: 1.5px solid var(--border);
       cursor: pointer; transition: all .15s; color: var(--muted);
     }
     .chip:hover, .chip.sel { background: var(--blue); border-color: var(--blue); color: #fff; }
@@ -193,20 +185,17 @@
     }
     .btn:active { transform: scale(.98); opacity: .85; }
     .btn-primary { background: var(--blue); color: #fff; }
-    .btn-success { background: var(--green); color: #fff; }
+    .btn-success { background: linear-gradient(135deg, #1e7a35 0%, #0d7070 100%); color: #fff; }
     .btn-danger  { background: var(--danger); color: #fff; }
     .btn-sm {
       display: inline-block; width: auto; padding: 6px 14px;
       font-size: .8rem; border-radius: 8px; font-weight: 600;
     }
-    .btn-ghost {
-      background: var(--bg); border: 1.5px solid var(--border); color: var(--text);
-    }
+    .btn-ghost { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); }
 
     .section-title {
       font-size: .8rem; font-weight: 700; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .8px;
-      margin-bottom: 10px;
+      text-transform: uppercase; letter-spacing: .8px; margin-bottom: 10px;
     }
 
     /* ── Catch card ── */
@@ -214,45 +203,45 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px;
-      margin-bottom: 10px;
+      padding: 14px; margin-bottom: 10px;
       box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
     .catch-card.needs-details { border-left: 3px solid var(--gold); }
     .catch-card.tappable {
-      cursor: pointer;
-      transition: box-shadow .15s, transform .1s;
+      cursor: pointer; transition: box-shadow .15s, transform .1s;
     }
     .catch-card.tappable:hover {
-      box-shadow: 0 3px 14px rgba(37,99,168,.15);
-      transform: translateY(-1px);
+      box-shadow: 0 3px 14px rgba(37,99,168,.15); transform: translateY(-1px);
     }
     .catch-card.tappable:active { transform: scale(.99); box-shadow: none; }
     .catch-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
     .catch-species { font-size: 1.05rem; font-weight: 700; color: var(--blue-dark); }
-    .catch-date { font-size: .75rem; color: var(--muted); white-space: nowrap; }
+    .catch-date { font-size: .75rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
     .catch-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .badge {
       display: inline-flex; align-items: center; gap: 3px;
-      padding: 3px 9px; border-radius: 6px;
-      font-size: .75rem; font-weight: 600;
+      padding: 3px 9px; border-radius: 6px; font-size: .75rem; font-weight: 600;
     }
     .badge-blue  { background: #e3f0fb; color: var(--blue); }
     .badge-green { background: var(--green-lt); color: var(--green); }
     .badge-gold  { background: #fdf5e0; color: #a07800; }
     .badge-teal  { background: #e0f7f7; color: var(--teal); }
     .badge-amber { background: #fff8e0; color: #8a6000; }
-    .badge-gps   {
-      background: var(--green-lt); color: var(--green);
-      cursor: pointer; text-decoration: none;
-    }
+    .badge-gps   { background: var(--green-lt); color: var(--green); cursor: pointer; text-decoration: none; }
     .badge-gps:hover { background: #c0edcc; }
     .catch-meta  { font-size: .8rem; color: var(--muted); margin-top: 7px; line-height: 1.5; }
     .catch-notes { font-size: .82rem; color: var(--text); margin-top: 7px; font-style: italic; }
     .catch-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 10px; }
 
-    /* ── Log Recent Catches ── */
-    .log-recent-section { margin-top: 24px; }
+    /* ── Recent Catches header ── */
+    .recent-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .recent-header .section-title { margin: 0; }
+    .count-badge {
+      background: var(--blue); color: #fff; font-size: .7rem; font-weight: 700;
+      padding: 2px 9px; border-radius: 10px;
+    }
 
     /* ── Filter bar ── */
     .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
@@ -263,10 +252,8 @@
     /* ── Stats ── */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px; text-align: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px; text-align: center;
       box-shadow: 0 1px 4px rgba(0,0,0,.06);
     }
     .stat-val { font-size: 2rem; font-weight: 800; color: var(--blue-dark); line-height: 1; }
@@ -274,10 +261,8 @@
     .leaderboard { margin-top: 14px; }
     .lb-row {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 8px; margin-bottom: 7px;
-      font-size: .9rem;
+      padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; margin-bottom: 7px; font-size: .9rem;
     }
     .lb-rank { font-weight: 800; color: var(--blue); width: 24px; }
     .lb-name { flex: 1; font-weight: 600; }
@@ -317,9 +302,20 @@
     }
     /* scrollable edit sheet */
     #edit-overlay .sheet-box {
-      max-height: 88vh;
-      overflow-y: auto;
+      max-height: 88vh; overflow-y: auto;
       padding-bottom: calc(24px + var(--safe-b));
+    }
+    /* species picker sheet */
+    #species-overlay .sheet-box {
+      max-height: 88vh; overflow-y: auto;
+      padding-bottom: calc(24px + var(--safe-b));
+    }
+    .picker-title {
+      font-size: 1.1rem; font-weight: 800; color: var(--text);
+      margin-bottom: 4px;
+    }
+    .picker-sub {
+      font-size: .82rem; color: var(--muted); margin-bottom: 16px;
     }
     .sheet-box h3 { font-size: 1.05rem; margin-bottom: 8px; }
     .sheet-box p  { font-size: .9rem; color: var(--muted); margin-bottom: 20px; }
@@ -334,6 +330,8 @@
     main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     #edit-overlay .sheet-box::-webkit-scrollbar { width: 4px; }
     #edit-overlay .sheet-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    #species-overlay .sheet-box::-webkit-scrollbar { width: 4px; }
+    #species-overlay .sheet-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -386,6 +384,20 @@
   </div>
 </div>
 
+<!-- Species picker sheet -->
+<div id="species-overlay" class="sheet-backdrop">
+  <div class="sheet-box">
+    <div class="sheet-handle"></div>
+    <div class="picker-title">🐟 What did you catch?</div>
+    <div class="picker-sub">Pick a species or type a custom name</div>
+    <div id="species-picker-body"></div>
+    <div class="sheet-actions">
+      <button class="btn btn-success" onclick="confirmQuickCatch()">🎣 Log Catch</button>
+      <button class="btn btn-ghost" onclick="skipSpecies()">Skip / Unknown</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── Data ────────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'fishlog_catches_v1';
@@ -409,7 +421,6 @@ const FISH_ICONS = {
   'Salmon':'🐟','Musky':'🦈','Carp':'🐡','Tilapia':'🐟'
 };
 
-// Inline SVG fish silhouettes for the three freshwater favorites
 const FISH_SVG = {
   Walleye: `<svg class="fish-svg" viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M6,15 C14,5 32,4 46,7 C58,10 64,13 64,15 C64,17 58,20 46,23 C32,26 14,25 6,15Z" fill="currentColor" opacity="0.88"/>
@@ -428,7 +439,6 @@ const FISH_SVG = {
     <circle cx="11" cy="18" r="1.8" fill="currentColor" opacity="0.9"/>
     <circle cx="18" cy="22" r="1.5" fill="currentColor" opacity="0.32"/>
     <circle cx="24" cy="17" r="1.5" fill="currentColor" opacity="0.32"/>
-    <circle cx="21" cy="27" r="1" fill="currentColor" opacity="0.22"/>
   </svg>`,
 
   Musky: `<svg class="fish-svg" viewBox="0 0 90 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -449,26 +459,83 @@ function showTab(tab) {
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('nav-' + tab).classList.add('active');
   const main = document.getElementById('main');
-  if (tab === 'log')     main.innerHTML = renderLogForm();
+  if (tab === 'log')     main.innerHTML = renderLogTab();
   if (tab === 'history') main.innerHTML = renderHistory();
   if (tab === 'stats')   main.innerHTML = renderStats();
-  if (tab === 'log') initLogForm();
 }
 
-// ─── Quick Catch ─────────────────────────────────────────────────────────────
+// ─── Quick Catch — Species Picker ────────────────────────────────────────────
 function quickCatch() {
+  // Build picker content dynamically so FISH_SVG is available
+  document.getElementById('species-picker-body').innerHTML = `
+    <div class="freshwater-label">🌿 Freshwater Favorites</div>
+    <div class="featured-fish">
+      ${['Walleye','Crappie','Musky'].map(s => `
+      <div class="fish-feature-card sp-fish-card" data-species="${s}" onclick="selectSpeciesInPicker('${s}')">
+        ${FISH_SVG[s]}
+        <div class="fish-feature-name">${s}</div>
+      </div>`).join('')}
+    </div>
+    <div class="species-chips" id="sp-chips">
+      ${SPECIES.map(s => `<span class="chip" data-species="${s}" onclick="selectSpeciesInPicker('${s}')">${FISH_ICONS[s]||'🐟'} ${s}</span>`).join('')}
+    </div>
+    <input id="sp-species" type="text" placeholder="Or type a custom species…" autocomplete="off" style="margin-top:10px" />
+  `;
+
+  const input = document.getElementById('sp-species');
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toLowerCase();
+    document.querySelectorAll('#sp-chips .chip').forEach(c =>
+      c.classList.toggle('sel', c.dataset.species.toLowerCase() === val));
+    document.querySelectorAll('.sp-fish-card').forEach(c =>
+      c.classList.toggle('sel', c.dataset.species.toLowerCase() === val));
+  });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') confirmQuickCatch(); });
+
+  document.getElementById('species-overlay').classList.add('open');
+  setTimeout(() => input.focus(), 320);
+}
+
+function selectSpeciesInPicker(name) {
+  document.getElementById('sp-species').value = name;
+  document.querySelectorAll('#sp-chips .chip').forEach(c =>
+    c.classList.toggle('sel', c.dataset.species === name));
+  document.querySelectorAll('.sp-fish-card').forEach(c =>
+    c.classList.toggle('sel', c.dataset.species === name));
+}
+
+function confirmQuickCatch() {
+  const species = document.getElementById('sp-species').value.trim();
+  closeSpeciesOverlay();
+  doQuickCatch(species);
+}
+
+function skipSpecies() {
+  closeSpeciesOverlay();
+  doQuickCatch('');
+}
+
+function closeSpeciesOverlay() {
+  document.getElementById('species-overlay').classList.remove('open');
+}
+
+document.getElementById('species-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeSpeciesOverlay();
+});
+
+function doQuickCatch(species) {
   const btn = document.getElementById('qc-btn');
-  btn.disabled = true;
-  btn.querySelector('.qc-title').textContent = 'Getting GPS…';
-  btn.querySelector('.qc-sub').textContent = 'Please wait';
+  if (btn) {
+    btn.disabled = true;
+    btn.querySelector('.qc-sub').textContent = 'Getting GPS…';
+  }
 
   const timestamp = new Date().toISOString();
 
   function finalize(gps) {
     const entry = {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2),
-      timestamp,
-      species: '',
+      timestamp, species,
       length: null, weight: null,
       location: '', lure: '', notes: '',
       released: false,
@@ -477,25 +544,19 @@ function quickCatch() {
     catches.unshift(entry);
     save(catches);
 
-    if (gps) {
-      showToast('Caught! ✓ GPS & time recorded 📍');
-    } else {
-      showToast('Caught! ✓ Time recorded — GPS unavailable');
+    if (btn) {
+      btn.disabled = false;
+      btn.querySelector('.qc-sub').textContent = 'Tap to select species & GPS';
     }
 
-    btn.disabled = false;
-    btn.querySelector('.qc-title').textContent = 'Quick Catch — Log Now';
-    btn.querySelector('.qc-sub').textContent = 'Records time & GPS instantly';
+    const label = species || 'Catch';
+    showToast(gps ? `${label} logged! 📍 GPS captured` : `${label} logged!`);
 
-    // Refresh the recent catches list without re-rendering the whole tab
     const wrap = document.getElementById('log-recent-wrap');
     if (wrap) wrap.innerHTML = renderRecentCatches();
   }
 
-  if (!navigator.geolocation) {
-    finalize(null);
-    return;
-  }
+  if (!navigator.geolocation) { finalize(null); return; }
 
   navigator.geolocation.getCurrentPosition(
     pos => finalize({ lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy) }),
@@ -504,140 +565,53 @@ function quickCatch() {
   );
 }
 
-// ─── Recent Catches (Log Tab) ─────────────────────────────────────────────────
-function renderRecentCatches() {
-  const recent = catches.slice(0, 8);
-  if (!recent.length) return '';
+// ─── Log Tab ──────────────────────────────────────────────────────────────────
+function renderLogTab() {
+  const today = new Date().toDateString();
+  const todayCount = catches.filter(c => new Date(c.timestamp).toDateString() === today).length;
+
   return `
-  <div class="log-recent-section">
-    <div class="section-title">Recent Catches — tap to edit</div>
-    ${recent.map(c => renderCatchCard(c, true)).join('')}
+  <button class="btn-quick" id="qc-btn" onclick="quickCatch()">
+    <span class="qc-icon">🎣</span>
+    <span class="qc-text">
+      <span class="qc-title">Log a Catch</span>
+      <span class="qc-sub">Tap to select species &amp; GPS</span>
+      ${todayCount > 0 ? `<span class="qc-today">🐟 ${todayCount} caught today</span>` : ''}
+    </span>
+    <span class="qc-deco">
+      <svg viewBox="0 0 90 22" fill="none">
+        <path d="M4,11 C14,4 38,3 56,5 C70,7 78,9 80,11 C78,13 70,15 56,17 C38,19 14,18 4,11Z" fill="currentColor"/>
+        <path d="M78,11 L92,2 L90,11 L92,20Z" fill="currentColor"/>
+        <path d="M6,11 L0,8 L2,11 L0,14Z" fill="currentColor" opacity="0.7"/>
+        <circle cx="13" cy="9" r="3" fill="white" opacity="0.6"/>
+      </svg>
+    </span>
+  </button>
+
+  <div id="log-recent-wrap" style="margin-top:20px">
+    ${catches.length ? renderRecentCatches() : renderLogEmpty()}
   </div>`;
 }
 
-// ─── Log Form ─────────────────────────────────────────────────────────────────
-function renderLogForm() {
-  const now = new Date();
-  const localISO = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0,16);
+function renderLogEmpty() {
   return `
-  <div class="quick-catch-wrap">
-    <button class="btn-quick" id="qc-btn" onclick="quickCatch()">
-      <span class="qc-icon">🎣</span>
-      <span class="qc-text">
-        <span class="qc-title">Quick Catch — Log Now</span>
-        <span class="qc-sub">Records time &amp; GPS instantly</span>
-      </span>
-    </button>
-  </div>
-
-  <div class="freshwater-label">🌿 Freshwater Favorites</div>
-  <div class="featured-fish">
-    ${['Walleye','Crappie','Musky'].map(s => `
-    <div class="fish-feature-card" data-species="${s}" onclick="selectSpecies('${s}')">
-      ${FISH_SVG[s]}
-      <div class="fish-feature-name">${s}</div>
-    </div>`).join('')}
-  </div>
-
-  <div class="qc-divider">or fill in details now</div>
-
-  <div class="section-title">New Catch</div>
-  <div class="card">
-    <div class="form-grid">
-      <div class="full">
-        <label>Species</label>
-        <div class="species-chips" id="chips">
-          ${SPECIES.map(s => `<span class="chip" data-species="${s}" onclick="selectSpecies('${s}')">${FISH_ICONS[s]||'🐟'} ${s}</span>`).join('')}
-        </div>
-        <input id="f-species" type="text" placeholder="Species (tap above or type)" autocomplete="off" />
-      </div>
-
-      <div>
-        <label>Length (in)</label>
-        <input id="f-length" type="number" placeholder="e.g. 14" min="0" step="0.5" inputmode="decimal" />
-      </div>
-      <div>
-        <label>Weight (lbs)</label>
-        <input id="f-weight" type="number" placeholder="e.g. 2.5" min="0" step="0.1" inputmode="decimal" />
-      </div>
-
-      <div class="full">
-        <label>Location</label>
-        <input id="f-location" type="text" placeholder="e.g. Lake Tahoe, North Shore" autocomplete="off" />
-      </div>
-
-      <div class="full">
-        <label>Lure / Bait</label>
-        <input id="f-lure" type="text" placeholder="e.g. Rapala J11, nightcrawler" autocomplete="off" />
-      </div>
-
-      <div class="full">
-        <label>Date &amp; Time</label>
-        <input id="f-datetime" type="datetime-local" value="${localISO}" />
-      </div>
-
-      <div class="full">
-        <label>Notes</label>
-        <textarea id="f-notes" placeholder="Water conditions, weather, depth…"></textarea>
-      </div>
-
-      <div class="full toggle-row">
-        <input type="checkbox" id="f-released" />
-        <label for="f-released">Released (catch &amp; release)</label>
-      </div>
-    </div>
-  </div>
-  <button class="btn btn-primary" onclick="submitCatch()">Save Catch 🎣</button>
-
-  <div id="log-recent-wrap">${catches.length ? renderRecentCatches() : ''}</div>`;
+  <div class="empty">
+    <div class="emoji">🌊</div>
+    <p style="font-weight:600;margin-bottom:6px">No catches yet!</p>
+    <p style="font-size:.85rem;margin-top:4px">Tap the button above to log your first fish.</p>
+  </div>`;
 }
 
-function initLogForm() {
-  const input = document.getElementById('f-species');
-  if (!input) return;
-  input.addEventListener('input', () => {
-    const val = input.value.trim().toLowerCase();
-    document.querySelectorAll('#chips .chip').forEach(c => {
-      c.classList.toggle('sel', c.dataset.species.toLowerCase() === val);
-    });
-    document.querySelectorAll('.fish-feature-card').forEach(c => {
-      c.classList.toggle('sel', c.dataset.species.toLowerCase() === val);
-    });
-  });
-}
-
-function selectSpecies(name) {
-  const input = document.getElementById('f-species');
-  if (input) input.value = name;
-  document.querySelectorAll('#chips .chip').forEach(c =>
-    c.classList.toggle('sel', c.dataset.species === name));
-  document.querySelectorAll('.fish-feature-card').forEach(c =>
-    c.classList.toggle('sel', c.dataset.species === name));
-}
-
-function submitCatch() {
-  const species  = document.getElementById('f-species').value.trim();
-  const length   = parseFloat(document.getElementById('f-length').value) || null;
-  const weight   = parseFloat(document.getElementById('f-weight').value) || null;
-  const location = document.getElementById('f-location').value.trim();
-  const lure     = document.getElementById('f-lure').value.trim();
-  const dt       = document.getElementById('f-datetime').value;
-  const notes    = document.getElementById('f-notes').value.trim();
-  const released = document.getElementById('f-released').checked;
-
-  if (!species) { showToast('Please enter a species.'); return; }
-
-  const entry = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2),
-    timestamp: dt ? new Date(dt).toISOString() : new Date().toISOString(),
-    species, length, weight, location, lure, notes, released,
-    gps: null
-  };
-
-  catches.unshift(entry);
-  save(catches);
-  showToast('Catch saved! 🎣');
-  showTab('log');
+function renderRecentCatches() {
+  const recent = catches.slice(0, 10);
+  if (!recent.length) return renderLogEmpty();
+  return `
+  <div class="recent-header">
+    <div class="section-title" style="margin:0">Recent Catches</div>
+    <span class="count-badge">${catches.length} total</span>
+  </div>
+  ${recent.map(c => renderCatchCard(c, true)).join('')}
+  ${catches.length > 10 ? `<p style="text-align:center;font-size:.82rem;color:var(--muted);padding:6px 0">+${catches.length - 10} more in History</p>` : ''}`;
 }
 
 // ─── History ──────────────────────────────────────────────────────────────────
@@ -692,14 +666,18 @@ function renderCatchCard(c, tappable) {
   const needsDetails = !c.species;
   const stopProp = tappable ? 'event.stopPropagation();' : '';
 
+  const icon = c.species ? (FISH_ICONS[c.species] || '🐟') : '';
+  const speciesDisplay = c.species
+    ? `${icon} ${esc(c.species)}`
+    : '<em style="color:var(--muted);font-weight:500">Unknown species</em>';
+
   const badges = [];
   if (c.length)   badges.push(`<span class="badge badge-blue">📏 ${c.length}"</span>`);
   if (c.weight)   badges.push(`<span class="badge badge-gold">⚖️ ${c.weight} lbs</span>`);
   if (c.lure)     badges.push(`<span class="badge badge-teal">🪝 ${esc(c.lure)}</span>`);
   if (c.released) badges.push(`<span class="badge badge-green">↩️ Released</span>`);
   if (c.gps) {
-    const lat = c.gps.lat.toFixed(5);
-    const lng = c.gps.lng.toFixed(5);
+    const lat = c.gps.lat.toFixed(5), lng = c.gps.lng.toFixed(5);
     const mapsUrl = `https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch`;
     badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps" onclick="${stopProp}">📍 ${lat}, ${lng}</a>`);
   }
@@ -710,13 +688,15 @@ function renderCatchCard(c, tappable) {
   meta.push(`🕐 ${dateStr} ${timeStr}`);
   if (c.gps && c.gps.acc) meta.push(`±${c.gps.acc}m`);
 
-  const cardAttrs = tappable ? ` class="catch-card${needsDetails?' needs-details':''} tappable" onclick="openEdit('${c.id}')"` : ` class="catch-card${needsDetails?' needs-details':''}"`;
+  const cardAttrs = tappable
+    ? ` class="catch-card${needsDetails?' needs-details':''} tappable" onclick="openEdit('${c.id}')"`
+    : ` class="catch-card${needsDetails?' needs-details':''}"`;
 
   return `
   <div${cardAttrs}>
     <div class="catch-header">
-      <span class="catch-species">${c.species ? esc(c.species) : '<em style="color:var(--muted);font-weight:500">Unknown species</em>'}</span>
-      <span class="catch-date">${dateStr}</span>
+      <span class="catch-species">${speciesDisplay}</span>
+      <span class="catch-date" title="${dateStr} ${timeStr}">${relativeTime(c.timestamp)}</span>
     </div>
     ${badges.length ? `<div class="catch-badges">${badges.join('')}</div>` : ''}
     <div class="catch-meta">${meta.join(' &nbsp;·&nbsp; ')}</div>
@@ -830,7 +810,7 @@ function saveEdit() {
   if (currentTab === 'history') showTab('history');
   if (currentTab === 'log') {
     const wrap = document.getElementById('log-recent-wrap');
-    if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : '';
+    if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : renderLogEmpty();
   }
 }
 
@@ -889,7 +869,7 @@ function renderStats() {
     ${topSpecies.map(([name, cnt], i) => `
     <div class="lb-row">
       <span class="lb-rank">${i+1}</span>
-      <span class="lb-name">${esc(name)}</span>
+      <span class="lb-name">${FISH_ICONS[name]||'🐟'} ${esc(name)}</span>
       <span class="lb-val">${cnt} catch${cnt>1?'es':''}</span>
     </div>`).join('')}
   </div>` : ''}
@@ -923,7 +903,7 @@ function doDelete() {
   if (currentTab === 'history') showTab('history');
   if (currentTab === 'log') {
     const wrap = document.getElementById('log-recent-wrap');
-    if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : '';
+    if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : renderLogEmpty();
   }
 }
 
@@ -971,6 +951,17 @@ function showToast(msg) {
 // ─── Util ─────────────────────────────────────────────────────────────────────
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function relativeTime(iso) {
+  const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (m < 1)  return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 7)  return `${d}d ago`;
+  return new Date(iso).toLocaleDateString(undefined, { month:'short', day:'numeric' });
 }
 
 // ─── Service Worker ───────────────────────────────────────────────────────────
