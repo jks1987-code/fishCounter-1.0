@@ -45,12 +45,12 @@
     header {
       background: var(--blue-dark);
       color: #fff;
-      padding: 14px 20px 10px;
-      padding-top: calc(14px + env(safe-area-inset-top, 0px));
+      padding: 10px 20px;
+      padding-top: calc(10px + env(safe-area-inset-top, 0px));
       display: flex; align-items: center; gap: 10px;
     }
+    .logo-img { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
     header h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: .5px; }
-    header .logo { font-size: 1.5rem; }
 
     main { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: calc(var(--nav-h) + var(--safe-b) + 16px); }
 
@@ -74,16 +74,6 @@
     nav button .icon { font-size: 1.4rem; }
     nav button.active { color: var(--blue); }
 
-    /* ── Cards ── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 14px;
-      box-shadow: 0 1px 4px rgba(0,0,0,.06);
-    }
-
     /* ── Quick Catch Hero Button ── */
     .btn-quick {
       width: 100%; border: none; border-radius: 20px; cursor: pointer;
@@ -92,9 +82,7 @@
       display: flex; align-items: center;
       box-shadow: 0 6px 24px rgba(14,128,128,.28), 0 2px 8px rgba(30,122,53,.22);
       transition: opacity .15s, transform .12s, box-shadow .15s;
-      overflow: hidden;
-      position: relative;
-      min-height: 104px;
+      overflow: hidden; position: relative; min-height: 104px;
       -webkit-tap-highlight-color: transparent;
     }
     .btn-quick:active { transform: scale(.97); opacity: .92; box-shadow: 0 2px 8px rgba(14,128,128,.18); }
@@ -102,9 +90,7 @@
     .btn-quick .qc-icon {
       width: 84px; min-width: 84px; height: 104px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.6rem;
-      background: rgba(0,0,0,.14);
-      flex-shrink: 0;
+      font-size: 2.6rem; background: rgba(0,0,0,.14); flex-shrink: 0;
     }
     .btn-quick .qc-text { padding: 0 16px; text-align: left; flex: 1; position: relative; z-index: 1; }
     .btn-quick .qc-title { font-size: 1.22rem; font-weight: 800; display: block; letter-spacing: .2px; }
@@ -112,13 +98,10 @@
     .btn-quick .qc-today {
       display: inline-block; margin-top: 8px;
       font-size: .72rem; font-weight: 700; opacity: .9;
-      background: rgba(255,255,255,.18); border-radius: 10px;
-      padding: 2px 9px;
+      background: rgba(255,255,255,.18); border-radius: 10px; padding: 2px 9px;
     }
-    /* decorative fish watermark inside button */
     .qc-deco {
-      position: absolute; right: -12px; top: 50%;
-      transform: translateY(-50%);
+      position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
       opacity: .13; pointer-events: none; color: #fff;
       animation: fishDrift 5s ease-in-out infinite;
     }
@@ -128,32 +111,29 @@
       50%      { transform: translateY(-50%) translateX(-8px); }
     }
 
-    /* ── Featured Fish (used inside picker) ── */
-    .freshwater-label {
-      font-size: .72rem; font-weight: 700;
-      color: var(--teal); text-transform: uppercase;
-      letter-spacing: .8px; margin-bottom: 8px;
+    /* ── Species Picker Grid ── */
+    .species-img-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px;
     }
-    .featured-fish {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;
+    .species-card {
+      border: 2px solid var(--border); border-radius: 10px;
+      padding: 8px 4px 6px; text-align: center; cursor: pointer;
+      background: var(--bg); transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .fish-feature-card {
-      background: var(--bg); border: 1.5px solid var(--border); border-radius: 12px;
-      padding: 10px 6px 8px; text-align: center; cursor: pointer;
-      transition: border-color .18s, background .18s, transform .12s;
-      -webkit-tap-highlight-color: transparent; user-select: none;
+    .species-card:hover, .species-card.sel { border-color: var(--teal); background: #e0f7f7; }
+    .species-card:active { transform: scale(.93); }
+    .species-card-img {
+      width: 100%; height: 54px; object-fit: contain; display: block; margin-bottom: 4px;
     }
-    .fish-feature-card:hover { border-color: var(--blue-light); background: #eef5fb; }
-    .fish-feature-card.sel  { border-color: var(--teal); background: #e0f7f7; }
-    .fish-feature-card:active { transform: scale(.93); }
-    .fish-svg {
-      width: 100%; height: 34px; color: var(--blue-light);
-      display: block; margin-bottom: 5px; transition: color .18s;
-    }
-    .fish-feature-card.sel .fish-svg { color: var(--teal); }
-    .fish-feature-name { font-size: .7rem; font-weight: 700; color: var(--text); letter-spacing: .3px; }
+    .species-card-name { font-size: .63rem; font-weight: 700; color: var(--text); display: block; line-height: 1.2; }
 
-    /* ── Form (edit overlay) ── */
+    /* ── Catch card species thumbnail ── */
+    .species-thumb {
+      width: 28px; height: 22px; object-fit: contain; vertical-align: middle; margin-right: 1px;
+    }
+
+    /* ── Form ── */
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .form-grid .full { grid-column: 1 / -1; }
     label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
@@ -165,6 +145,12 @@
     }
     input:focus, select:focus, textarea:focus { border-color: var(--blue-light); background: #fff; }
     textarea { resize: vertical; min-height: 70px; }
+
+    /* weight / length compound inputs */
+    .measure-row { display: flex; align-items: center; gap: 8px; }
+    .measure-row input  { flex: 2; min-width: 0; }
+    .measure-row select { flex: 2; min-width: 0; }
+    .unit-lbl { font-size: .82rem; font-weight: 600; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
 
     .species-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
     .chip {
@@ -200,22 +186,16 @@
 
     /* ── Catch card ── */
     .catch-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px; margin-bottom: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
       box-shadow: 0 1px 3px rgba(0,0,0,.05);
     }
     .catch-card.needs-details { border-left: 3px solid var(--gold); }
-    .catch-card.tappable {
-      cursor: pointer; transition: box-shadow .15s, transform .1s;
-    }
-    .catch-card.tappable:hover {
-      box-shadow: 0 3px 14px rgba(37,99,168,.15); transform: translateY(-1px);
-    }
+    .catch-card.tappable { cursor: pointer; transition: box-shadow .15s, transform .1s; }
+    .catch-card.tappable:hover { box-shadow: 0 3px 14px rgba(37,99,168,.15); transform: translateY(-1px); }
     .catch-card.tappable:active { transform: scale(.99); box-shadow: none; }
     .catch-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-    .catch-species { font-size: 1.05rem; font-weight: 700; color: var(--blue-dark); }
+    .catch-species { font-size: 1.05rem; font-weight: 700; color: var(--blue-dark); display: flex; align-items: center; gap: 4px; }
     .catch-date { font-size: .75rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
     .catch-badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .badge {
@@ -234,20 +214,16 @@
     .catch-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 10px; }
 
     /* ── Recent Catches header ── */
-    .recent-header {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
-    }
+    .recent-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .recent-header .section-title { margin: 0; }
-    .count-badge {
-      background: var(--blue); color: #fff; font-size: .7rem; font-weight: 700;
-      padding: 2px 9px; border-radius: 10px;
-    }
+    .count-badge { background: var(--blue); color: #fff; font-size: .7rem; font-weight: 700; padding: 2px 9px; border-radius: 10px; }
 
     /* ── Filter bar ── */
     .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-    .filter-bar input, .filter-bar select {
-      flex: 1; min-width: 100px; padding: 9px 12px; font-size: .88rem;
-    }
+    .filter-bar input, .filter-bar select { flex: 1; min-width: 100px; padding: 9px 12px; font-size: .88rem; }
+
+    /* ── Import/Export row ── */
+    .io-row { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
 
     /* ── Stats ── */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -265,7 +241,8 @@
       border-radius: 8px; margin-bottom: 7px; font-size: .9rem;
     }
     .lb-rank { font-weight: 800; color: var(--blue); width: 24px; }
-    .lb-name { flex: 1; font-weight: 600; }
+    .lb-name { flex: 1; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .lb-thumb { width: 28px; height: 20px; object-fit: contain; }
     .lb-val  { font-size: .82rem; color: var(--muted); font-weight: 600; }
 
     /* ── Empty state ── */
@@ -284,7 +261,7 @@
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── Bottom sheet overlay (shared) ── */
+    /* ── Bottom sheet overlays ── */
     .sheet-backdrop {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,.45); z-index: 300;
@@ -296,48 +273,30 @@
       padding: 20px; padding-bottom: calc(20px + var(--safe-b));
       width: 100%; max-width: 540px;
     }
-    .sheet-handle {
-      width: 36px; height: 4px; background: var(--border);
-      border-radius: 2px; margin: 0 auto 16px;
+    .sheet-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+    #edit-overlay .sheet-box, #species-overlay .sheet-box {
+      max-height: 88vh; overflow-y: auto; padding-bottom: calc(24px + var(--safe-b));
     }
-    /* scrollable edit sheet */
-    #edit-overlay .sheet-box {
-      max-height: 88vh; overflow-y: auto;
-      padding-bottom: calc(24px + var(--safe-b));
-    }
-    /* species picker sheet */
-    #species-overlay .sheet-box {
-      max-height: 88vh; overflow-y: auto;
-      padding-bottom: calc(24px + var(--safe-b));
-    }
-    .picker-title {
-      font-size: 1.1rem; font-weight: 800; color: var(--text);
-      margin-bottom: 4px;
-    }
-    .picker-sub {
-      font-size: .82rem; color: var(--muted); margin-bottom: 16px;
-    }
+    .picker-title { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+    .picker-sub   { font-size: .82rem; color: var(--muted); margin-bottom: 14px; }
     .sheet-box h3 { font-size: 1.05rem; margin-bottom: 8px; }
     .sheet-box p  { font-size: .9rem; color: var(--muted); margin-bottom: 20px; }
     .sheet-actions { display: flex; gap: 10px; margin-top: 16px; }
     .sheet-actions button { flex: 1; }
 
-    /* ── Export ── */
-    .export-row { display: flex; justify-content: flex-end; margin-bottom: 14px; }
-
     /* scrollbar */
-    main::-webkit-scrollbar { width: 4px; }
-    main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-    #edit-overlay .sheet-box::-webkit-scrollbar { width: 4px; }
-    #edit-overlay .sheet-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    main::-webkit-scrollbar,
+    #edit-overlay .sheet-box::-webkit-scrollbar,
     #species-overlay .sheet-box::-webkit-scrollbar { width: 4px; }
+    main::-webkit-scrollbar-thumb,
+    #edit-overlay .sheet-box::-webkit-scrollbar-thumb,
     #species-overlay .sheet-box::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
   </style>
 </head>
 <body>
 <div id="app">
   <header>
-    <span class="logo">🎣</span>
+    <img src="logo.png" class="logo-img" alt="Fish Log" />
     <h1>Fish Log</h1>
   </header>
 
@@ -389,7 +348,7 @@
   <div class="sheet-box">
     <div class="sheet-handle"></div>
     <div class="picker-title">🐟 What did you catch?</div>
-    <div class="picker-sub">Pick a species or type a custom name</div>
+    <div class="picker-sub">Select a species or type a custom name</div>
     <div id="species-picker-body"></div>
     <div class="sheet-actions">
       <button class="btn btn-success" onclick="confirmQuickCatch()">🎣 Log Catch</button>
@@ -398,60 +357,70 @@
   </div>
 </div>
 
-<script>
-// ─── Data ────────────────────────────────────────────────────────────────────
-const STORAGE_KEY = 'fishlog_catches_v1';
+<!-- Hidden CSV file input -->
+<input type="file" id="csv-import-input" accept=".csv" style="display:none" onchange="importCSV(this)" />
 
+<script>
+// ─── Constants ────────────────────────────────────────────────────────────────
+const STORAGE_KEY   = 'fishlog_catches_v1';
+const LOCATIONS_KEY = 'fishlog_locations_v1';
+const LURES_KEY     = 'fishlog_lures_v1';
+
+// Alphabetical species list
+const SPECIES = [
+  'Bluegill','Crappie','Largemouth Bass','Muskie',
+  'Perch','Pike','Salmon','Smallmouth Bass','Trout','Walleye'
+];
+
+const FISH_IMAGES = {
+  'Walleye':        'walleyeemoj.png',
+  'Smallmouth Bass':'smallmouthemoj.png',
+  'Largemouth Bass':'largemouthemoji,.png',
+  'Salmon':         'salmonemoj.png',
+  'Crappie':        'blackcrappieemoj.png',
+  'Bluegill':       'bluegillemoj.png',
+  'Perch':          'perch.png',
+  'Muskie':         'muskieemoji,.png',
+  'Pike':           'pikeemoji,.png',
+  'Trout':          'troutemoji,.png'
+};
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
 function load() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-  catch { return []; }
+  try {
+    let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    // Migrate legacy species spellings
+    data = data.map(c => {
+      if (c.species === 'Musky') c.species = 'Muskie';
+      return c;
+    });
+    return data;
+  } catch { return []; }
 }
 function save(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+function getLocations() { try { return JSON.parse(localStorage.getItem(LOCATIONS_KEY)) || []; } catch { return []; } }
+function addLocation(loc) {
+  if (!loc) return;
+  const list = getLocations();
+  if (!list.includes(loc)) { list.sort(); list.splice(sortedIndex(list, loc), 0, loc); localStorage.setItem(LOCATIONS_KEY, JSON.stringify(list)); }
+}
+function getLures() { try { return JSON.parse(localStorage.getItem(LURES_KEY)) || []; } catch { return []; } }
+function addLure(lure) {
+  if (!lure) return;
+  const list = getLures();
+  if (!list.includes(lure)) { list.sort(); list.splice(sortedIndex(list, lure), 0, lure); localStorage.setItem(LURES_KEY, JSON.stringify(list)); }
+}
+function sortedIndex(arr, val) {
+  let lo = 0, hi = arr.length;
+  while (lo < hi) { const mid = (lo + hi) >>> 1; if (arr[mid] < val) lo = mid + 1; else hi = mid; }
+  return lo;
+}
 
 let catches = load();
 let currentTab = 'log';
 let pendingDeleteId = null;
 let editingId = null;
-
-const SPECIES = ['Bass','Trout','Walleye','Pike','Perch','Catfish','Crappie','Bluegill','Salmon','Musky','Carp','Tilapia'];
-
-const FISH_ICONS = {
-  'Bass':'🐟','Trout':'🐠','Walleye':'🐡','Pike':'🦈',
-  'Perch':'🐟','Catfish':'🐡','Crappie':'🐠','Bluegill':'🐟',
-  'Salmon':'🐟','Musky':'🦈','Carp':'🐡','Tilapia':'🐟'
-};
-
-const FISH_SVG = {
-  Walleye: `<svg class="fish-svg" viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6,15 C14,5 32,4 46,7 C58,10 64,13 64,15 C64,17 58,20 46,23 C32,26 14,25 6,15Z" fill="currentColor" opacity="0.88"/>
-    <path d="M62,15 L76,5 L74,15 L76,25Z" fill="currentColor" opacity="0.72"/>
-    <path d="M24,7 C28,3 36,2 42,5" stroke="currentColor" stroke-width="2" fill="none" opacity="0.5"/>
-    <circle cx="16" cy="13" r="4" fill="white"/>
-    <circle cx="16" cy="13" r="2.5" fill="currentColor" opacity="0.9"/>
-    <circle cx="14.5" cy="11.5" r="0.9" fill="white"/>
-  </svg>`,
-
-  Crappie: `<svg class="fish-svg" viewBox="0 0 55 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M5,20 C8,6 22,4 30,10 C38,16 38,24 30,30 C22,36 8,34 5,20Z" fill="currentColor" opacity="0.88"/>
-    <path d="M28,20 L42,8 L40,20 L42,32Z" fill="currentColor" opacity="0.72"/>
-    <path d="M13,5 L15,2 L17,5 L19,2 L21,5 L23,3 L25,7 L21,12 L13,13Z" fill="currentColor" opacity="0.6"/>
-    <circle cx="11" cy="18" r="3" fill="white"/>
-    <circle cx="11" cy="18" r="1.8" fill="currentColor" opacity="0.9"/>
-    <circle cx="18" cy="22" r="1.5" fill="currentColor" opacity="0.32"/>
-    <circle cx="24" cy="17" r="1.5" fill="currentColor" opacity="0.32"/>
-  </svg>`,
-
-  Musky: `<svg class="fish-svg" viewBox="0 0 90 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4,11 C14,4 38,3 56,5 C70,7 78,9 80,11 C78,13 70,15 56,17 C38,19 14,18 4,11Z" fill="currentColor" opacity="0.88"/>
-    <path d="M78,11 L92,2 L90,11 L92,20Z" fill="currentColor" opacity="0.72"/>
-    <path d="M6,11 L0,8 L2,11 L0,14Z" fill="currentColor" opacity="0.65"/>
-    <line x1="30" y1="5" x2="32" y2="17" stroke="white" stroke-width="1.5" opacity="0.28"/>
-    <line x1="42" y1="4" x2="44" y2="18" stroke="white" stroke-width="1.5" opacity="0.28"/>
-    <line x1="54" y1="5" x2="56" y2="17" stroke="white" stroke-width="1.5" opacity="0.28"/>
-    <circle cx="13" cy="9" r="2.5" fill="white"/>
-    <circle cx="13" cy="9" r="1.5" fill="currentColor" opacity="0.9"/>
-  </svg>`
-};
 
 // ─── Routing ──────────────────────────────────────────────────────────────────
 function showTab(tab) {
@@ -464,20 +433,15 @@ function showTab(tab) {
   if (tab === 'stats')   main.innerHTML = renderStats();
 }
 
-// ─── Quick Catch — Species Picker ────────────────────────────────────────────
+// ─── Species Picker ───────────────────────────────────────────────────────────
 function quickCatch() {
-  // Build picker content dynamically so FISH_SVG is available
   document.getElementById('species-picker-body').innerHTML = `
-    <div class="freshwater-label">🌿 Freshwater Favorites</div>
-    <div class="featured-fish">
-      ${['Walleye','Crappie','Musky'].map(s => `
-      <div class="fish-feature-card sp-fish-card" data-species="${s}" onclick="selectSpeciesInPicker('${s}')">
-        ${FISH_SVG[s]}
-        <div class="fish-feature-name">${s}</div>
+    <div class="species-img-grid" id="sp-grid">
+      ${SPECIES.map(s => `
+      <div class="species-card" data-species="${s}" onclick="selectSpeciesInPicker('${s}')">
+        <img src="${FISH_IMAGES[s]}" alt="${s}" class="species-card-img" loading="lazy" />
+        <span class="species-card-name">${s}</span>
       </div>`).join('')}
-    </div>
-    <div class="species-chips" id="sp-chips">
-      ${SPECIES.map(s => `<span class="chip" data-species="${s}" onclick="selectSpeciesInPicker('${s}')">${FISH_ICONS[s]||'🐟'} ${s}</span>`).join('')}
     </div>
     <input id="sp-species" type="text" placeholder="Or type a custom species…" autocomplete="off" style="margin-top:10px" />
   `;
@@ -485,9 +449,7 @@ function quickCatch() {
   const input = document.getElementById('sp-species');
   input.addEventListener('input', () => {
     const val = input.value.trim().toLowerCase();
-    document.querySelectorAll('#sp-chips .chip').forEach(c =>
-      c.classList.toggle('sel', c.dataset.species.toLowerCase() === val));
-    document.querySelectorAll('.sp-fish-card').forEach(c =>
+    document.querySelectorAll('#sp-grid .species-card').forEach(c =>
       c.classList.toggle('sel', c.dataset.species.toLowerCase() === val));
   });
   input.addEventListener('keydown', e => { if (e.key === 'Enter') confirmQuickCatch(); });
@@ -498,9 +460,7 @@ function quickCatch() {
 
 function selectSpeciesInPicker(name) {
   document.getElementById('sp-species').value = name;
-  document.querySelectorAll('#sp-chips .chip').forEach(c =>
-    c.classList.toggle('sel', c.dataset.species === name));
-  document.querySelectorAll('.sp-fish-card').forEach(c =>
+  document.querySelectorAll('#sp-grid .species-card').forEach(c =>
     c.classList.toggle('sel', c.dataset.species === name));
 }
 
@@ -510,25 +470,18 @@ function confirmQuickCatch() {
   doQuickCatch(species);
 }
 
-function skipSpecies() {
-  closeSpeciesOverlay();
-  doQuickCatch('');
-}
+function skipSpecies() { closeSpeciesOverlay(); doQuickCatch(''); }
 
 function closeSpeciesOverlay() {
   document.getElementById('species-overlay').classList.remove('open');
 }
-
 document.getElementById('species-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeSpeciesOverlay();
 });
 
 function doQuickCatch(species) {
   const btn = document.getElementById('qc-btn');
-  if (btn) {
-    btn.disabled = true;
-    btn.querySelector('.qc-sub').textContent = 'Getting GPS…';
-  }
+  if (btn) { btn.disabled = true; btn.querySelector('.qc-sub').textContent = 'Getting GPS…'; }
 
   const timestamp = new Date().toISOString();
 
@@ -538,16 +491,12 @@ function doQuickCatch(species) {
       timestamp, species,
       length: null, weight: null,
       location: '', lure: '', notes: '',
-      released: false,
-      gps: gps || null
+      released: false, gps: gps || null
     };
     catches.unshift(entry);
     save(catches);
 
-    if (btn) {
-      btn.disabled = false;
-      btn.querySelector('.qc-sub').textContent = 'Tap to select species & GPS';
-    }
+    if (btn) { btn.disabled = false; btn.querySelector('.qc-sub').textContent = 'Tap to select species & GPS'; }
 
     const label = species || 'Catch';
     showToast(gps ? `${label} logged! 📍 GPS captured` : `${label} logged!`);
@@ -557,7 +506,6 @@ function doQuickCatch(species) {
   }
 
   if (!navigator.geolocation) { finalize(null); return; }
-
   navigator.geolocation.getCurrentPosition(
     pos => finalize({ lat: pos.coords.latitude, lng: pos.coords.longitude, acc: Math.round(pos.coords.accuracy) }),
     ()  => finalize(null),
@@ -569,7 +517,6 @@ function doQuickCatch(species) {
 function renderLogTab() {
   const today = new Date().toDateString();
   const todayCount = catches.filter(c => new Date(c.timestamp).toDateString() === today).length;
-
   return `
   <button class="btn-quick" id="qc-btn" onclick="quickCatch()">
     <span class="qc-icon">🎣</span>
@@ -587,15 +534,13 @@ function renderLogTab() {
       </svg>
     </span>
   </button>
-
   <div id="log-recent-wrap" style="margin-top:20px">
     ${catches.length ? renderRecentCatches() : renderLogEmpty()}
   </div>`;
 }
 
 function renderLogEmpty() {
-  return `
-  <div class="empty">
+  return `<div class="empty">
     <div class="emoji">🌊</div>
     <p style="font-weight:600;margin-bottom:6px">No catches yet!</p>
     <p style="font-size:.85rem;margin-top:4px">Tap the button above to log your first fish.</p>
@@ -633,8 +578,10 @@ function renderHistory() {
       ${speciesSet.map(s => `<option value="${s}" ${histFilter.species===s?'selected':''}>${s}</option>`).join('')}
     </select>
   </div>
-  <div class="export-row">
+  <div class="io-row">
+    <button class="btn btn-ghost btn-sm" onclick="document.getElementById('csv-import-input').click()">⬆ Import CSV</button>
     <button class="btn btn-primary btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="btn btn-primary btn-sm" onclick="exportGPX()">⬇ Export GPX</button>
   </div>
   <div id="catch-list">${cards}</div>`;
 }
@@ -659,6 +606,7 @@ function filterCatches() {
   });
 }
 
+// ─── Catch Card ───────────────────────────────────────────────────────────────
 function renderCatchCard(c, tappable) {
   const d = new Date(c.timestamp);
   const dateStr = d.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
@@ -666,20 +614,22 @@ function renderCatchCard(c, tappable) {
   const needsDetails = !c.species;
   const stopProp = tappable ? 'event.stopPropagation();' : '';
 
-  const icon = c.species ? (FISH_ICONS[c.species] || '🐟') : '';
+  const imgSrc = c.species && FISH_IMAGES[c.species];
+  const thumbHtml = imgSrc
+    ? `<img src="${imgSrc}" class="species-thumb" alt="${esc(c.species)}" loading="lazy" />`
+    : '';
   const speciesDisplay = c.species
-    ? `${icon} ${esc(c.species)}`
+    ? `${thumbHtml}${esc(c.species)}`
     : '<em style="color:var(--muted);font-weight:500">Unknown species</em>';
 
   const badges = [];
-  if (c.length)   badges.push(`<span class="badge badge-blue">📏 ${c.length}"</span>`);
-  if (c.weight)   badges.push(`<span class="badge badge-gold">⚖️ ${c.weight} lbs</span>`);
+  if (c.length)   badges.push(`<span class="badge badge-blue">📏 ${formatLength(c.length)}</span>`);
+  if (c.weight)   badges.push(`<span class="badge badge-gold">⚖️ ${formatWeight(c.weight)}</span>`);
   if (c.lure)     badges.push(`<span class="badge badge-teal">🪝 ${esc(c.lure)}</span>`);
   if (c.released) badges.push(`<span class="badge badge-green">↩️ Released</span>`);
   if (c.gps) {
-    const lat = c.gps.lat.toFixed(5), lng = c.gps.lng.toFixed(5);
     const mapsUrl = `https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch`;
-    badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps" onclick="${stopProp}">📍 ${lat}, ${lng}</a>`);
+    badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps" onclick="${stopProp}">📍 ${c.gps.lat.toFixed(5)}, ${c.gps.lng.toFixed(5)}</a>`);
   }
   if (needsDetails) badges.push(`<span class="badge badge-amber">✏️ Needs details</span>`);
 
@@ -708,7 +658,7 @@ function renderCatchCard(c, tappable) {
   </div>`;
 }
 
-// ─── Edit ────────────────────────────────────────────────────────────────────
+// ─── Edit ─────────────────────────────────────────────────────────────────────
 function openEdit(id) {
   const c = catches.find(x => x.id === id);
   if (!c) return;
@@ -717,33 +667,58 @@ function openEdit(id) {
   const d = new Date(c.timestamp);
   const localISO = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0,16);
 
+  const wLbs = c.weight ? Math.floor(c.weight) : '';
+  const wOz  = c.weight ? Math.round((c.weight - Math.floor(c.weight)) * 16) : '';
+  const lIn  = c.length ? Math.floor(c.length) : '';
+  const lFrac = c.length ? (c.length - Math.floor(c.length)) : 0;
+
+  const locOpts = getLocations().map(l => `<option value="${esc(l)}">`).join('');
+  const lureOpts = getLures().map(l => `<option value="${esc(l)}">`).join('');
+
   document.getElementById('edit-form-body').innerHTML = `
+    <datalist id="dl-locations">${locOpts}</datalist>
+    <datalist id="dl-lures">${lureOpts}</datalist>
     <div class="form-grid">
       <div class="full">
         <label>Species</label>
         <div class="species-chips" id="edit-chips">
-          ${SPECIES.map(s => `<span class="chip${c.species===s?' sel':''}" data-species="${s}" onclick="editSelectSpecies('${s}')">${FISH_ICONS[s]||'🐟'} ${s}</span>`).join('')}
+          ${SPECIES.map(s => `<span class="chip${c.species===s?' sel':''}" data-species="${s}" onclick="editSelectSpecies('${s}')">${s}</span>`).join('')}
         </div>
         <input id="e-species" type="text" value="${esc(c.species||'')}" placeholder="Species" autocomplete="off" />
       </div>
 
       <div>
-        <label>Length (in)</label>
-        <input id="e-length" type="number" value="${c.length||''}" placeholder="e.g. 14" min="0" step="0.5" inputmode="decimal" />
+        <label>Length</label>
+        <div class="measure-row">
+          <input id="e-length-in" type="number" value="${lIn}" min="0" max="120" placeholder="0" inputmode="numeric" />
+          <span class="unit-lbl">in</span>
+          <select id="e-length-frac">
+            <option value="0"    ${lFrac<0.1?'selected':''}>—</option>
+            <option value="0.25" ${Math.abs(lFrac-0.25)<0.05?'selected':''}>¼</option>
+            <option value="0.5"  ${Math.abs(lFrac-0.5)<0.05?'selected':''}>½</option>
+            <option value="0.75" ${Math.abs(lFrac-0.75)<0.05?'selected':''}>¾</option>
+          </select>
+        </div>
       </div>
+
       <div>
-        <label>Weight (lbs)</label>
-        <input id="e-weight" type="number" value="${c.weight||''}" placeholder="e.g. 2.5" min="0" step="0.1" inputmode="decimal" />
+        <label>Weight</label>
+        <div class="measure-row">
+          <input id="e-weight-lbs" type="number" value="${wLbs}" min="0" max="999" placeholder="0" inputmode="numeric" />
+          <span class="unit-lbl">lbs</span>
+          <input id="e-weight-oz" type="number" value="${wOz}" min="0" max="15" placeholder="0" inputmode="numeric" style="max-width:52px" />
+          <span class="unit-lbl">oz</span>
+        </div>
       </div>
 
       <div class="full">
         <label>Location</label>
-        <input id="e-location" type="text" value="${esc(c.location||'')}" placeholder="e.g. Lake Tahoe, North Shore" autocomplete="off" />
+        <input id="e-location" type="text" list="dl-locations" value="${esc(c.location||'')}" placeholder="e.g. Lake Erie, North Shore" autocomplete="off" />
       </div>
 
       <div class="full">
         <label>Lure / Bait</label>
-        <input id="e-lure" type="text" value="${esc(c.lure||'')}" placeholder="e.g. Rapala J11, nightcrawler" autocomplete="off" />
+        <input id="e-lure" type="text" list="dl-lures" value="${esc(c.lure||'')}" placeholder="e.g. Rapala J11, nightcrawler" autocomplete="off" />
       </div>
 
       <div class="full">
@@ -755,7 +730,7 @@ function openEdit(id) {
         <label>GPS Waypoint</label>
         <div style="font-size:.85rem;color:var(--muted);padding:8px 0">
           📍 ${c.gps.lat.toFixed(6)}, ${c.gps.lng.toFixed(6)}
-          ${c.gps.acc ? `<span style="margin-left:6px">±${c.gps.acc}m accuracy</span>` : ''}
+          ${c.gps.acc ? `<span style="margin-left:6px">±${c.gps.acc}m</span>` : ''}
           &nbsp;·&nbsp; <a href="https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch" target="_blank" style="color:var(--blue)">Open in Maps</a>
         </div>
       </div>` : ''}
@@ -791,20 +766,30 @@ function saveEdit() {
   const idx = catches.findIndex(x => x.id === editingId);
   if (idx === -1) return;
 
-  const dt = document.getElementById('e-datetime').value;
+  const dt      = document.getElementById('e-datetime').value;
+  const location = document.getElementById('e-location').value.trim();
+  const lure     = document.getElementById('e-lure').value.trim();
+
+  const lIn   = parseInt(document.getElementById('e-length-in').value)   || 0;
+  const lFrac = parseFloat(document.getElementById('e-length-frac').value) || 0;
+  const length = (lIn + lFrac) || null;
+
+  const wLbs = parseInt(document.getElementById('e-weight-lbs').value) || 0;
+  const wOz  = parseInt(document.getElementById('e-weight-oz').value)  || 0;
+  const weight = (wLbs + wOz / 16) || null;
+
   catches[idx] = {
     ...catches[idx],
-    species:  document.getElementById('e-species').value.trim(),
-    length:   parseFloat(document.getElementById('e-length').value) || null,
-    weight:   parseFloat(document.getElementById('e-weight').value) || null,
-    location: document.getElementById('e-location').value.trim(),
-    lure:     document.getElementById('e-lure').value.trim(),
+    species:   document.getElementById('e-species').value.trim(),
+    length, weight, location, lure,
     timestamp: dt ? new Date(dt).toISOString() : catches[idx].timestamp,
-    notes:    document.getElementById('e-notes').value.trim(),
-    released: document.getElementById('e-released').checked,
+    notes:     document.getElementById('e-notes').value.trim(),
+    released:  document.getElementById('e-released').checked,
   };
 
   save(catches);
+  addLocation(location);
+  addLure(lure);
   closeEditOverlay();
   showToast('Catch updated!');
   if (currentTab === 'history') showTab('history');
@@ -818,7 +803,6 @@ function closeEditOverlay() {
   document.getElementById('edit-overlay').classList.remove('open');
   editingId = null;
 }
-
 document.getElementById('edit-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeEditOverlay();
 });
@@ -850,28 +834,30 @@ function renderStats() {
   <div class="stats-grid">
     <div class="stat-card"><div class="stat-val">${total}</div><div class="stat-label">Total Catches</div></div>
     <div class="stat-card"><div class="stat-val">${released}</div><div class="stat-label">Released</div></div>
-    <div class="stat-card"><div class="stat-val">${biggest ? biggest.length + '"' : '—'}</div><div class="stat-label">Longest Fish</div></div>
-    <div class="stat-card"><div class="stat-val">${heaviest ? heaviest.weight + ' lbs' : '—'}</div><div class="stat-label">Heaviest Fish</div></div>
+    <div class="stat-card"><div class="stat-val">${biggest ? formatLength(biggest.length) : '—'}</div><div class="stat-label">Longest Fish</div></div>
+    <div class="stat-card"><div class="stat-val">${heaviest ? formatWeight(heaviest.weight) : '—'}</div><div class="stat-label">Heaviest Fish</div></div>
     <div class="stat-card"><div class="stat-val">${avgLength}"</div><div class="stat-label">Avg Length</div></div>
     <div class="stat-card"><div class="stat-val">${gpsCount}</div><div class="stat-label">GPS Waypoints</div></div>
   </div>
 
-  ${biggest ? `<div class="card" style="margin-top:14px">
+  ${biggest ? `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:14px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
     <div class="section-title">🏆 Biggest Catch</div>
-    <strong>${esc(biggest.species)}</strong> — ${biggest.length}"
-    ${biggest.weight ? ` / ${biggest.weight} lbs` : ''}
+    <strong>${esc(biggest.species)}</strong> — ${formatLength(biggest.length)}
+    ${biggest.weight ? ` / ${formatWeight(biggest.weight)}` : ''}
     ${biggest.location ? `<br><span style="color:var(--muted);font-size:.82rem">📍 ${esc(biggest.location)}</span>` : ''}
   </div>` : ''}
 
   ${topSpecies.length ? `
   <div class="section-title" style="margin-top:14px">Top Species</div>
   <div class="leaderboard">
-    ${topSpecies.map(([name, cnt], i) => `
-    <div class="lb-row">
-      <span class="lb-rank">${i+1}</span>
-      <span class="lb-name">${FISH_ICONS[name]||'🐟'} ${esc(name)}</span>
-      <span class="lb-val">${cnt} catch${cnt>1?'es':''}</span>
-    </div>`).join('')}
+    ${topSpecies.map(([name, cnt], i) => {
+      const img = FISH_IMAGES[name] ? `<img src="${FISH_IMAGES[name]}" class="lb-thumb" loading="lazy" />` : '🐟';
+      return `<div class="lb-row">
+        <span class="lb-rank">${i+1}</span>
+        <span class="lb-name">${img}${esc(name)}</span>
+        <span class="lb-val">${cnt} catch${cnt>1?'es':''}</span>
+      </div>`;
+    }).join('')}
   </div>` : ''}
 
   ${topLocations.length ? `
@@ -911,7 +897,6 @@ function closeDeleteOverlay() {
   document.getElementById('delete-overlay').classList.remove('open');
   pendingDeleteId = null;
 }
-
 document.getElementById('delete-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeDeleteOverlay();
 });
@@ -926,31 +911,127 @@ function exportCSV() {
       d.toLocaleDateString(), d.toLocaleTimeString(),
       c.species||'', c.length||'', c.weight||'',
       c.location||'', c.lure||'', c.released?'Yes':'No', c.notes||'',
-      c.gps ? c.gps.lat : '', c.gps ? c.gps.lng : '', c.gps ? (c.gps.acc||'') : ''
+      c.gps?c.gps.lat:'', c.gps?c.gps.lng:'', c.gps?(c.gps.acc||''):''
     ].map(v => `"${String(v).replace(/"/g,'""')}"`);
   });
   const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `fish-log-${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
+  downloadBlob(csv, 'text/csv', `fish-log-${isoDate()}.csv`);
   showToast('CSV exported!');
 }
 
-// ─── Toast ────────────────────────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+// ─── Import CSV ───────────────────────────────────────────────────────────────
+function importCSV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const lines = e.target.result.split('\n');
+    if (lines.length < 2) { showToast('CSV appears empty.'); return; }
+    let imported = 0, skipped = 0;
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      const v = parseCSVRow(line);
+      // Expected columns: Date,Time,Species,Length,Weight,Location,Lure,Released,Notes,Lat,Lng,Acc
+      if (v.length < 2) continue;
+      const parsed = new Date(`${v[0]} ${v[1]}`);
+      const timestamp = isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+      const species  = (v[2]||'').trim();
+      const length   = parseFloat(v[3]) || null;
+      const weight   = parseFloat(v[4]) || null;
+      const location = (v[5]||'').trim();
+      const lure     = (v[6]||'').trim();
+      const released = (v[7]||'').trim().toLowerCase() === 'yes';
+      const notes    = (v[8]||'').trim();
+      const lat      = parseFloat(v[9]);
+      const lng      = parseFloat(v[10]);
+      const acc      = parseFloat(v[11]) || null;
+      const gps = (isFinite(lat) && isFinite(lng)) ? { lat, lng, acc } : null;
+      const entry = {
+        id: Date.now().toString(36) + Math.random().toString(36).slice(2) + i,
+        timestamp, species, length, weight, location, lure, notes, released, gps
+      };
+      catches.push(entry);
+      if (location) addLocation(location);
+      if (lure)     addLure(lure);
+      imported++;
+    }
+    catches.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+    save(catches);
+    showToast(`Imported ${imported} catch${imported!==1?'es':''}!`);
+    if (currentTab === 'log') {
+      const wrap = document.getElementById('log-recent-wrap');
+      if (wrap) wrap.innerHTML = catches.length ? renderRecentCatches() : renderLogEmpty();
+    } else if (currentTab === 'history') showTab('history');
+  };
+  reader.readAsText(file);
+  input.value = '';
 }
 
-// ─── Util ─────────────────────────────────────────────────────────────────────
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function parseCSVRow(line) {
+  const fields = []; let field = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQ && line[i+1] === '"') { field += '"'; i++; }
+      else inQ = !inQ;
+    } else if (ch === ',' && !inQ) {
+      fields.push(field); field = '';
+    } else { field += ch; }
+  }
+  fields.push(field);
+  return fields;
+}
+
+// ─── Export GPX ───────────────────────────────────────────────────────────────
+function exportGPX() {
+  const withGPS = catches.filter(c => c.gps);
+  if (!withGPS.length) { showToast('No GPS catches to export.'); return; }
+
+  const wpts = withGPS.map(c => {
+    const desc = [
+      c.species,
+      c.length ? formatLength(c.length) : null,
+      c.weight ? formatWeight(c.weight) : null,
+      c.location, c.lure, c.notes
+    ].filter(Boolean).join(' · ');
+    return `  <wpt lat="${c.gps.lat}" lon="${c.gps.lng}">
+    <ele>0</ele>
+    <time>${new Date(c.timestamp).toISOString()}</time>
+    <name>${escX(c.species || 'Catch')}</name>
+    <desc>${escX(desc)}</desc>
+    <sym>Fish</sym>
+  </wpt>`;
+  }).join('\n');
+
+  const gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Fish Log" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>Fish Log Waypoints</name>
+    <time>${new Date().toISOString()}</time>
+  </metadata>
+${wpts}
+</gpx>`;
+
+  downloadBlob(gpx, 'application/gpx+xml', `fish-log-${isoDate()}.gpx`);
+  showToast(`GPX exported — ${withGPS.length} waypoint${withGPS.length!==1?'s':''}!`);
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function formatLength(l) {
+  if (!l) return '—';
+  const w = Math.floor(l), f = l - w;
+  const fStr = Math.abs(f-0.25)<0.05?'¼':Math.abs(f-0.5)<0.05?'½':Math.abs(f-0.75)<0.05?'¾':'';
+  return `${w}${fStr}"`;
+}
+
+function formatWeight(w) {
+  if (!w) return '—';
+  const lbs = Math.floor(w);
+  const oz  = Math.round((w - lbs) * 16);
+  if (oz === 0)  return `${lbs} lbs`;
+  if (lbs === 0) return `${oz} oz`;
+  return `${lbs} lbs ${oz} oz`;
 }
 
 function relativeTime(iso) {
@@ -962,6 +1043,32 @@ function relativeTime(iso) {
   const d = Math.floor(h / 24);
   if (d < 7)  return `${d}d ago`;
   return new Date(iso).toLocaleDateString(undefined, { month:'short', day:'numeric' });
+}
+
+function downloadBlob(content, type, filename) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], { type }));
+  a.download = filename;
+  a.click();
+}
+
+function isoDate() { return new Date().toISOString().slice(0,10); }
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escX(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
 // ─── Service Worker ───────────────────────────────────────────────────────────

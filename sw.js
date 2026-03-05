@@ -1,5 +1,10 @@
-const CACHE = 'fishlog-v3';
-const ASSETS = ['./', './index.html', './manifest.json'];
+const CACHE = 'fishlog-v4';
+const ASSETS = [
+  './', './index.html', './manifest.json', './logo.png',
+  './walleyeemoj.png', './smallmouthemoj.png', './largemouthemoji,.png',
+  './salmonemoj.png', './blackcrappieemoj.png', './bluegillemoj.png',
+  './perch.png', './muskieemoji,.png', './pikeemoji,.png', './troutemoji,.png'
+];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -14,7 +19,6 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Only handle same-origin GET requests
   if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) return;
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
