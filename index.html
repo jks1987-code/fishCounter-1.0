@@ -88,9 +88,12 @@
     .btn-quick:active { transform: scale(.97); opacity: .92; box-shadow: 0 2px 8px rgba(14,128,128,.18); }
     .btn-quick:disabled { opacity: .65; cursor: not-allowed; transform: none; }
     .btn-quick .qc-icon {
-      width: 84px; min-width: 84px; height: 104px;
+      width: 96px; min-width: 96px; height: 104px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 2.6rem; background: rgba(0,0,0,.14); flex-shrink: 0;
+      flex-shrink: 0; overflow: hidden; border-radius: 18px 0 0 18px;
+    }
+    .btn-quick .qc-icon img {
+      width: 100%; height: 100%; object-fit: cover;
     }
     .btn-quick .qc-text { padding: 0 16px; text-align: left; flex: 1; position: relative; z-index: 1; }
     .btn-quick .qc-title { font-size: 1.22rem; font-weight: 800; display: block; letter-spacing: .2px; }
@@ -99,16 +102,6 @@
       display: inline-block; margin-top: 8px;
       font-size: .72rem; font-weight: 700; opacity: .9;
       background: rgba(255,255,255,.18); border-radius: 10px; padding: 2px 9px;
-    }
-    .qc-deco {
-      position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
-      opacity: .13; pointer-events: none; color: #fff;
-      animation: fishDrift 5s ease-in-out infinite;
-    }
-    .qc-deco svg { width: 170px; height: 74px; }
-    @keyframes fishDrift {
-      0%,100% { transform: translateY(-50%) translateX(0); }
-      50%      { transform: translateY(-50%) translateX(-8px); }
     }
 
     /* ── Species Picker Grid ── */
@@ -519,19 +512,11 @@ function renderLogTab() {
   const todayCount = catches.filter(c => new Date(c.timestamp).toDateString() === today).length;
   return `
   <button class="btn-quick" id="qc-btn" onclick="quickCatch()">
-    <span class="qc-icon">🎣</span>
+    <span class="qc-icon"><img src="logo.png" alt="Fish Log" /></span>
     <span class="qc-text">
       <span class="qc-title">Log a Catch</span>
       <span class="qc-sub">Tap to select species &amp; GPS</span>
       ${todayCount > 0 ? `<span class="qc-today">🐟 ${todayCount} caught today</span>` : ''}
-    </span>
-    <span class="qc-deco">
-      <svg viewBox="0 0 90 22" fill="none">
-        <path d="M4,11 C14,4 38,3 56,5 C70,7 78,9 80,11 C78,13 70,15 56,17 C38,19 14,18 4,11Z" fill="currentColor"/>
-        <path d="M78,11 L92,2 L90,11 L92,20Z" fill="currentColor"/>
-        <path d="M6,11 L0,8 L2,11 L0,14Z" fill="currentColor" opacity="0.7"/>
-        <circle cx="13" cy="9" r="3" fill="white" opacity="0.6"/>
-      </svg>
     </span>
   </button>
   <div id="log-recent-wrap" style="margin-top:20px">
