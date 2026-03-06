@@ -217,6 +217,7 @@
       font-size: .7rem; color: #fff; font-weight: 700; line-height: 1;
     }
     .photo-btns { display: flex; gap: 8px; }
+    .photo-hint { font-size: .72rem; color: var(--muted); margin-top: 5px; font-style: italic; }
 
     /* ── Full-screen photo viewer ── */
     #photo-viewer {
@@ -513,6 +514,8 @@ function renderEditPhotoStrip() {
       <button class="photo-thumb-del" onclick="event.stopPropagation();editRemovePhoto('${id}')">✕</button>
     </div>`;
   }).join('');
+  const hint = document.getElementById('edit-photos-hint');
+  if (hint) hint.style.display = editPhotoState.current.length ? '' : 'none';
 }
 
 function editAddPhoto(mode) {
@@ -884,7 +887,8 @@ function openEdit(id) {
       <div class="full">
         <label>Photos</label>
         <div id="edit-photos-strip" class="photos-strip"></div>
-        <div class="photo-btns">
+        <div id="edit-photos-hint" class="photo-hint" style="display:none">Long-press image → Save to Camera Roll</div>
+        <div class="photo-btns" style="margin-top:8px">
           <button type="button" class="btn btn-ghost btn-sm" onclick="editAddPhoto('camera')">📷 Camera</button>
           <button type="button" class="btn btn-ghost btn-sm" onclick="editAddPhoto('gallery')">🖼 Gallery</button>
         </div>
