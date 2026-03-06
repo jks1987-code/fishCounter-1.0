@@ -202,6 +202,36 @@
     .badge-amber { background: #fff8e0; color: #8a6000; }
     .badge-gps   { background: var(--green-lt); color: var(--green); cursor: pointer; text-decoration: none; }
     .badge-gps:hover { background: #c0edcc; }
+
+    /* ── Photo strip ── */
+    .photos-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .photo-thumb {
+      position: relative; width: 82px; height: 82px; border-radius: 10px;
+      overflow: hidden; flex-shrink: 0; background: var(--border); cursor: pointer;
+    }
+    .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-thumb-del {
+      position: absolute; top: 4px; right: 4px; width: 22px; height: 22px;
+      border-radius: 50%; background: rgba(0,0,0,.65); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; color: #fff; font-weight: 700; line-height: 1;
+    }
+    .photo-btns { display: flex; gap: 8px; }
+
+    /* ── Full-screen photo viewer ── */
+    #photo-viewer {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.93); z-index: 500;
+      align-items: center; justify-content: center;
+    }
+    #photo-viewer.open { display: flex; }
+    #photo-viewer img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 6px; }
+    #photo-viewer-close {
+      position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: 20px;
+      background: rgba(255,255,255,.18); border: none; color: #fff;
+      font-size: 1.3rem; width: 38px; height: 38px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
     .catch-meta  { font-size: .8rem; color: var(--muted); margin-top: 7px; line-height: 1.5; }
     .catch-notes { font-size: .82rem; color: var(--text); margin-top: 7px; font-style: italic; }
     .catch-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 10px; }
@@ -350,8 +380,16 @@
   </div>
 </div>
 
-<!-- Hidden CSV file input -->
-<input type="file" id="csv-import-input" accept=".csv" style="display:none" onchange="importCSV(this)" />
+<!-- Hidden file inputs -->
+<input type="file" id="csv-import-input"    accept=".csv"   style="display:none" onchange="importCSV(this)" />
+<input type="file" id="photo-camera-input"  accept="image/*" capture="environment" style="display:none" onchange="editPhotoSelected(this)" />
+<input type="file" id="photo-gallery-input" accept="image/*" style="display:none" onchange="editPhotoSelected(this)" />
+
+<!-- Full-screen photo viewer -->
+<div id="photo-viewer">
+  <button id="photo-viewer-close" onclick="closePhotoViewer()">✕</button>
+  <img id="photo-viewer-img" src="" alt="catch photo" />
+</div>
 
 <script>
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -414,6 +452,118 @@ let catches = load();
 let currentTab = 'log';
 let pendingDeleteId = null;
 let editingId = null;
+
+// ─── Photo Storage (IndexedDB) ────────────────────────────────────────────────
+let _photoDB = null;
+function openPhotoDB() {
+  if (_photoDB) return Promise.resolve(_photoDB);
+  return new Promise((res, rej) => {
+    const req = indexedDB.open('fishlog_photos_v1', 1);
+    req.onupgradeneeded = e => e.target.result.createObjectStore('photos', { keyPath: 'id' });
+    req.onsuccess = e => { _photoDB = e.target.result; res(_photoDB); };
+    req.onerror   = e => rej(e.target.error);
+  });
+}
+function dbPutPhoto(id, blob) {
+  return openPhotoDB().then(db => new Promise((res, rej) => {
+    const tx = db.transaction('photos', 'readwrite');
+    tx.objectStore('photos').put({ id, blob });
+    tx.oncomplete = res; tx.onerror = e => rej(e.target.error);
+  }));
+}
+function dbGetPhoto(id) {
+  return openPhotoDB().then(db => new Promise((res, rej) => {
+    const req = db.transaction('photos').objectStore('photos').get(id);
+    req.onsuccess = e => res(e.target.result ? e.target.result.blob : null);
+    req.onerror   = e => rej(e.target.error);
+  }));
+}
+function dbDeletePhoto(id) {
+  return openPhotoDB().then(db => new Promise((res, rej) => {
+    const tx = db.transaction('photos', 'readwrite');
+    tx.objectStore('photos').delete(id);
+    tx.oncomplete = res; tx.onerror = e => rej(e.target.error);
+  }));
+}
+function genPhotoId() {
+  return 'p_' + Date.now().toString(36) + Math.random().toString(36).slice(2);
+}
+
+// ─── Edit Photo State ─────────────────────────────────────────────────────────
+let editPhotoState = { original: [], current: [], added: [], urls: {} };
+
+function loadEditPhotos(photoIds) {
+  editPhotoState = { original: [...photoIds], current: [...photoIds], added: [], urls: {} };
+  if (!photoIds.length) return;
+  Promise.all(photoIds.map(id => dbGetPhoto(id).then(blob => ({ id, blob })))).then(results => {
+    results.forEach(({ id, blob }) => {
+      if (blob) editPhotoState.urls[id] = URL.createObjectURL(blob);
+    });
+    renderEditPhotoStrip();
+  });
+}
+
+function renderEditPhotoStrip() {
+  const strip = document.getElementById('edit-photos-strip');
+  if (!strip) return;
+  strip.innerHTML = editPhotoState.current.map(id => {
+    const url = editPhotoState.urls[id] || '';
+    return `<div class="photo-thumb" onclick="viewPhoto('${id}')">
+      ${url ? `<img src="${url}" alt="photo" />` : '<div style="width:100%;height:100%;background:var(--border)"></div>'}
+      <button class="photo-thumb-del" onclick="event.stopPropagation();editRemovePhoto('${id}')">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function editAddPhoto(mode) {
+  document.getElementById(mode === 'camera' ? 'photo-camera-input' : 'photo-gallery-input').click();
+}
+
+function editPhotoSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const id = genPhotoId();
+  dbPutPhoto(id, file).then(() => {
+    editPhotoState.current.push(id);
+    editPhotoState.added.push(id);
+    editPhotoState.urls[id] = URL.createObjectURL(file);
+    renderEditPhotoStrip();
+  });
+  input.value = '';
+}
+
+function editRemovePhoto(id) {
+  editPhotoState.current = editPhotoState.current.filter(x => x !== id);
+  if (editPhotoState.urls[id]) { URL.revokeObjectURL(editPhotoState.urls[id]); delete editPhotoState.urls[id]; }
+  renderEditPhotoStrip();
+}
+
+function editCleanupPhotos(saved) {
+  Object.values(editPhotoState.urls).forEach(u => URL.revokeObjectURL(u));
+  if (saved) {
+    // delete photos removed during editing
+    editPhotoState.original.filter(id => !editPhotoState.current.includes(id)).forEach(dbDeletePhoto);
+  } else {
+    // cancel: undo any newly added photos
+    editPhotoState.added.forEach(dbDeletePhoto);
+  }
+  editPhotoState = { original: [], current: [], added: [], urls: {} };
+}
+
+// ─── Photo Viewer ─────────────────────────────────────────────────────────────
+function viewPhoto(id) {
+  const url = editPhotoState.urls[id];
+  if (!url) return;
+  document.getElementById('photo-viewer-img').src = url;
+  document.getElementById('photo-viewer').classList.add('open');
+}
+function closePhotoViewer() {
+  document.getElementById('photo-viewer').classList.remove('open');
+  document.getElementById('photo-viewer-img').src = '';
+}
+document.getElementById('photo-viewer').addEventListener('click', function(e) {
+  if (e.target === this) closePhotoViewer();
+});
 
 // ─── Routing ──────────────────────────────────────────────────────────────────
 function showTab(tab) {
@@ -616,6 +766,7 @@ function renderCatchCard(c, tappable) {
     const mapsUrl = `https://maps.apple.com/?ll=${c.gps.lat},${c.gps.lng}&q=Catch`;
     badges.push(`<a href="${mapsUrl}" target="_blank" class="badge badge-gps" onclick="${stopProp}">📍 ${c.gps.lat.toFixed(5)}, ${c.gps.lng.toFixed(5)}</a>`);
   }
+  if (c.photoIds && c.photoIds.length) badges.push(`<span class="badge badge-teal">📷 ${c.photoIds.length} photo${c.photoIds.length>1?'s':''}</span>`);
   if (needsDetails) badges.push(`<span class="badge badge-amber">✏️ Needs details</span>`);
 
   const meta = [];
@@ -729,6 +880,15 @@ function openEdit(id) {
         <input type="checkbox" id="e-released" ${c.released?'checked':''} />
         <label for="e-released">Released (catch &amp; release)</label>
       </div>
+
+      <div class="full">
+        <label>Photos</label>
+        <div id="edit-photos-strip" class="photos-strip"></div>
+        <div class="photo-btns">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="editAddPhoto('camera')">📷 Camera</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="editAddPhoto('gallery')">🖼 Gallery</button>
+        </div>
+      </div>
     </div>`;
 
   const input = document.getElementById('e-species');
@@ -739,6 +899,7 @@ function openEdit(id) {
   });
 
   document.getElementById('edit-overlay').classList.add('open');
+  loadEditPhotos(c.photoIds || []);
 }
 
 function editSelectSpecies(name) {
@@ -770,12 +931,15 @@ function saveEdit() {
     timestamp: dt ? new Date(dt).toISOString() : catches[idx].timestamp,
     notes:     document.getElementById('e-notes').value.trim(),
     released:  document.getElementById('e-released').checked,
+    photoIds:  [...editPhotoState.current],
   };
 
   save(catches);
   addLocation(location);
   addLure(lure);
-  closeEditOverlay();
+  editCleanupPhotos(true);
+  document.getElementById('edit-overlay').classList.remove('open');
+  editingId = null;
   showToast('Catch updated!');
   if (currentTab === 'history') showTab('history');
   if (currentTab === 'log') {
@@ -785,6 +949,7 @@ function saveEdit() {
 }
 
 function closeEditOverlay() {
+  editCleanupPhotos(false);
   document.getElementById('edit-overlay').classList.remove('open');
   editingId = null;
 }
